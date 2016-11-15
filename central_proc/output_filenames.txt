@@ -1,3 +1,0 @@
-speech_accuracy
-speech_speed
-cv_gesture
