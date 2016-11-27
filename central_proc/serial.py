@@ -1,7 +1,7 @@
 import os
 import time
 from interruptingcow import timeout
-TIMEOUT = 60
+TIMEOUT = 30 # in seconds
 
 # output data structure:
 # name of output (eg speech_speed), file, check type (eg "min", "inRange", "dict"?), data
@@ -13,6 +13,24 @@ TIMEOUT = 60
 #     },
 #     "speech_accuracy": {...}
 # }
+
+def configureOutputs():
+    outputs = {}
+    outputDir = 'dummy_programs/output/'
+    configFile = open(os.path.dirname(os.path.realpath(__file__))+'/config.txt', 'r')
+    for config in configFile:
+        config = config.split()
+        name = config[0]
+        outputs[name] = { "file": open(outputDir+name+'.txt', 'r') }
+        if len(config) > 1:
+            outputs[name]["checkType"] = config[1]
+            if config[1] == "inRange":
+                outputs[name]["data"] = [float(config[2]), float(config[3])]
+                print name + " must be in range: " + str(config[2]) + " and " + str(config[3])
+            else:
+                outputs[name]["data"] = float(config[2])
+    configFile.close()
+    return outputs
 
 def readFiles(outputs):
     for name, info in outputs.iteritems():
@@ -33,26 +51,17 @@ def readFiles(outputs):
                     if float(line.rstrip('\n')) < info["data"]:
                         print name+" is too low!"
                 elif checkType == "inRange":
-                    if float(line.rstrip('\n')) < info["data"][0] or float(line.rstrip('\n')) > info["data"][1]:
-                        print name+" is out of range!"
+                    if float(line.rstrip('\n')) < info["data"][0]:
+                        print name+" is too low"
+                    elif float(line.rstrip('\n')) > info["data"][1]:
+                        print name+" is too high"
     return 0
 
 def main():
     # set up outputs dictionary
-    outputs = {}
-    outputDir = 'dummy_programs/output/'
-    configFile = open(os.path.dirname(os.path.realpath(__file__))+'/config.txt', 'r')
-    for config in configFile:
-        config = config.split()
-        name = config[0]
-        outputs[name] = { "file": open(outputDir+name+'.txt', 'r') }
-        if len(config) > 1:
-            outputs[name]["checkType"] = config[1]
-            if config[1] == "inRange":
-                outputs[name]["data"] = [config[2], config[3]]
-            else:
-                outputs[name]["data"] = config[2]
-    configFile.close()
+    print "Starting configuration"
+    outputs = configureOutputs()
+    print "Finished configuration"
 
     # read and check outputs
     # using solution given by andresfp to add a timeout: http://stackoverflow.com/a/13293360/3845770
