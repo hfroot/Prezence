@@ -14,8 +14,7 @@ TIMEOUT = 30 # in seconds
 #     "speech_accuracy": {...}
 # }
 
-def configureOutputs():
-    outputs = {}
+def configure(outputs, feedbackMap):
     outputDir = 'dummy_programs/output/'
     configFile = open(os.path.dirname(os.path.realpath(__file__))+'/config.txt', 'r')
     for config in configFile:
@@ -26,13 +25,19 @@ def configureOutputs():
             outputs[name]["checkType"] = config[1]
             if config[1] == "inRange":
                 outputs[name]["data"] = [float(config[2]), float(config[3])]
+                feedbackMap[name+"-"+"low"] = int(config[4])
+                feedbackMap[name+"-"+"high"] = int(config[5])
                 print name + " must be in range: " + str(config[2]) + " and " + str(config[3])
             else:
                 outputs[name]["data"] = float(config[2])
+                feedbackMap[name] = int(config[3])
     configFile.close()
-    return outputs
 
-def readFiles(outputs):
+def mapToFeedback(name, feedback):
+    feedbackIdx = name+"_"+feedback
+    return feedbackMap[feedbackIdx]
+
+def giveFeedback(outputs, feedbackMap, kineticFeedbackFile):
     for name, info in outputs.iteritems():
         # the following inspired by the soln: http://code.activestate.com/recipes/157035-tail-f-in-python/
         f = info["file"];
@@ -50,17 +55,24 @@ def readFiles(outputs):
                 if checkType == "min":
                     if float(line.rstrip('\n')) < info["data"]:
                         print name+" is too low!"
+                        kineticFeedbackFile.write(str(feedbackMap[name])+"\n")
                 elif checkType == "inRange":
                     if float(line.rstrip('\n')) < info["data"][0]:
                         print name+" is too low"
+                        kineticFeedbackFile.write(str(feedbackMap[name+"-low"])+"\n")
                     elif float(line.rstrip('\n')) > info["data"][1]:
                         print name+" is too high"
+                        kineticFeedbackFile.write(str(feedbackMap[name+"-high"])+"\n")
     return 0
 
 def main():
     # set up outputs dictionary
     print "Starting configuration"
-    outputs = configureOutputs()
+    kineticFeedbackFile = open(os.path.dirname(os.path.realpath(__file__))+'/kinetic_feedback.txt', 'w')
+    outputs = {}
+    feedbackMap = {}
+    configure(outputs, feedbackMap)
+    print feedbackMap
     print "Finished configuration"
 
     # read and check outputs
@@ -69,12 +81,13 @@ def main():
         with timeout(TIMEOUT, exception=RuntimeError):
             stop = 0
             while not stop: # safety to stop loop
-                stop = readFiles(outputs)
+                stop = giveFeedback(outputs, feedbackMap, kineticFeedbackFile)
             print "Stopping: Module called for stop"
     except RuntimeError:
         print "Stopping: timeout (greater than "+str(float(TIMEOUT/60))+" minutes)"
         pass
 
+    kineticFeedbackFile.close()
     for name, info in outputs.iteritems():
         info["file"].close()
     return 0
