@@ -2,9 +2,13 @@
 
 ## Dates!
 **Thursday 1st**: First test on NAO
+
 **Monday 12th/Tuesday 13th**: Test on people
+
 **Wednesday 14th**: Last minute changes
+
 **Thursday 15th**: Demo
+
 **Thursday 22nd**: Final research paper
 
 ## Run
