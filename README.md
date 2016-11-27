@@ -4,12 +4,32 @@
 So that the robot can be run with one command from one laptop, I've created a start script that can take some inputs as necessary. Currently, to run it, start in the `Prezence` directory and type `./scripts/start.sh dummy_programs serial`. The first command specifies where all the programs are, while the second specifies the control script to use. This may be changed in the future if you guys like the proposed structure.
 
 ## Outputs
-Add your outputs here.
-#### Dummy speech speed
-Writes to `dummy_programs/ouput/speech_speed.txt`, with `random.random()` every 0.5 seconds.
+
+#### Speech speed
+Writes to [output](output)/speed.txt at regular intervals with speed in words per minute as an integer.
+
+#### Speech accuracy
+Writes to [output](output)/accuracy.txt at regular intervals with a confidence level between 0 and 1.
+
+#### Speech volume
+Writes to [output](output)/volume.txt at regular intervals with an absolute value between 0 and 10000.
+
+#### Gestures
+Writes to [output](output)/gestures.txt. Gestures being monitored: facing away, folded arms, gesticulating, moving, covering mouth, hands in pockets, shifting weight?. Written whenever there is a change or every 30 seconds. 
+
+#### Head gaze
+Writes to [output](output)/head_gaze.txt. Output `x y` angle (0 - 180) as an integer. Output at regular intervals. This is for determining whether enough contact is being made with the audience.
+
+#### Central processor
+Writes to [output](output)/kinetic_feedback.txt with values from 1 to 9 when needed.
+
+#### Synchronisation
+Speech script writes to [output](output)/sync.txt with start or stop on a new line. Everyone else monitors this file to know when to start and stop recording.
 
 ## Proposed structure
-I've written some dummy files so that I can start making the central processing hub. These can be found in [dummy_programs](dummy_programs). However, maybe a neater way than sticking all the programs in one folder is to create separate folders depending on module, and in those there may or may not be more than one file. I've followed this convention for [the central processing hub](central_proc) in which I've put a config file to tell me the output filenames that will be written to by the other programs, and the script which will read those files.
+The script [script/start.sh](script/start.sh) will start all of the programs in parallel. Please add your start command, with the correct path relative to the main Prezence folder, to this line. 
+All the modules will need to monitor [output](output)/sync.txt to know when to start and stop. 
+Have a folder for each module ([speech](speech), [computer_vision](computer_vision), [kinetic_feedback](kinetic_feedback) and [central_processor](central_processor)) in which any files you need will be stored.
 
 ## Branching conventions
 The convention that my workplace used over the summer (granted they used fossil and not git, fossil so much easier to use but a lot less popular) is that the master branch should always be ready to run - so it is tested and happy to go. So any development goes on in branches, and when you're happy the full feature works you merge the master branch into your branch, then merge your branch into master. This seemed to be a pretty good way of doing things. If you were making a small change then you didn't have to do that, so you don't have the hassle of branching and immediately merging.
