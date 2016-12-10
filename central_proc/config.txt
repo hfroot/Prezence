@@ -1,4 +1,4 @@
-speed min 140 max 180 allowance 6 priority 3
-volume min 60 max 100 allowance 8 priority 2
-accuracy min 0.8 allowance 4 priority 1
-head_gaze min 100 max 200 allowance 3 priority 4
+speed min 140 max 180 allowance 1 priority 3
+volume min 60 max 100 allowance 1 priority 2
+accuracy min 0.8 allowance 0 priority 1
+head_gaze min 100 allowance 2 priority 4
