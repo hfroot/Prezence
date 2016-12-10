@@ -1522,38 +1522,25 @@ def main(robotIP,robotPort):
     print "End Presentation"
 
 
-    print "Begin Feedback"
+    print "Begin Post-Speech Feedback"
+
+    postspeech_feedbackfile = open('output/postspeech_feedback.txt', 'r')    
+    data=postspeech_feedbackfile.read()
+
+    animatedSpeechProxy.say(data, gesture_confused)
 
 
-    animatedSpeechProxy.say("I will now give an overview of your presentation", gesture_confused)
 
-    animatedSpeechProxy.say("You looked at me ", gesture_confused)
-    
-    "You looked at me" + relevantstats+ "percent of the time." 
-    
-    "You moved your hands" + relevantstats+ "percent of the time." 
-
-    "Your voice was unclear for " + relevantstats+ "percent of the time." 
-
-    "Your speech was too fast for " + relevantstats+ "percent of the time." 
-
-    "Your speech was too slow for " + relevantstats+ "percent of the time."
-
-    "Your speech was too loud for " + relevantstats+ "percent of the time." 
-
-    "Your speech was too soft for " + relevantstats+ "percent of the time." 
-
-    "That was good! Keep it up!"
-    "That wasn't so good, try to improve it next time!"
-    "That's alright, though there's room for improvement!"
+    end_presentation()
 
 
 
 
 
 
-    gesture_confused(robotIP)
-    StandUp(postureProxy)
+
+    # gesture_confused(robotIP)
+    # StandUp(postureProxy)
 
     # ttsProxy.say("Shut up weicong")
 
