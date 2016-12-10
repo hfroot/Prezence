@@ -1453,9 +1453,9 @@ def decode_input(char,robotIP):
  
 def main(robotIP,robotPort):
 
-    #initialise 
+    #==================initialise the NAO===========================
     print "Initialising NAO"
-        #Setting the Proxies
+    #Setting the Proxies
     try:
         motionProxy = ALProxy("ALMotion", robotIP, robotPort)
     except Exception, e:
@@ -1490,35 +1490,56 @@ def main(robotIP,robotPort):
 
     #StandUp
     StandUp(postureProxy)
+    #==================Check for Presentation to Begin===========================
 
-
-    begin_presentation()
-
-
-
+    start = False
+    syncFile = open('output/sync.txt', 'r')
+    while not start:
+        # read sync
+        where = syncFile.tell()
+        line = syncFile.readline()
+        if not line or line in ['\n', '\r\n']:
+            time.sleep(1)
+            syncFile.seek(where)
+        else:
+            if line.rstrip('\n') == "start":
+                start = True
+    print "Sync File has announced start"
     print "Begin Presentation"
+
+
+    #================== Detecting inputs ===========================
 
     #Listening State
     gesture_9_nod(robotIP)
 
     #Reads kineticFeedback File
-    start = False
-    kinetic_feedbackfile = open('output/kinetic_feedback.txt', 'r')    
-    while not start:
+    stop = False
+    kinetic_feedbackfile = open('output/kinetic_feedback.txt', 'r')
+
+    while not stop:
         where = kinetic_feedbackfile.tell()
         line = kinetic_feedbackfile.readline()
+        syncwhere = syncFile.tell()
+        syncline = syncFile.readline()
+        #Checks for new inputs into kinect file
         if not line or line in ['\n','\n']:
             time.sleep(1)
-            kinetic_feedbackfile(where)
-
+            kinetic_feedbackfile.seek(where)
+            gesture_9_nod(robotIP) #Goes to listening state
         else:
             #if kinetic feedback output file changes
-            if line.rstrip('n') != 0:
+            if line.rstrip('\n') != 0:
                 #do output
-                decode_input(line.rstrip('n'),robotIP)
-                start = True
+                decode_input(line.rstrip('\n'),robotIP)
+        if not syncline or syncline in ['\n','\n']:
+            time.sleep(1)
+            syncFile.seek(syncwhere)
+        else:
+            if syncline.rstrip('\n') == "stop":
+                stop = True
+            
 
-    end_presentation()
     print "End Presentation"
 
 
