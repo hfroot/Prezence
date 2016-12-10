@@ -1228,11 +1228,12 @@ def gesture_confused(motionProxy):
 
     try:
       # uncomment the following line and modify the IP if you use this script outside Choregraphe.
-      motion = ALProxy("ALMotion", robotIP, 9559)
+      # motion = ALProxy("ALMotion", robotIP, 9559)
         #motion = ALProxy("ALMotion")
-      motion.angleInterpolation(names, keys, times, True)
+      motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
+
 
 def check_input(outputs, feedbackMap, kineticFeedbackFile):
     for name, info in outputs.iteritems():
@@ -1447,9 +1448,9 @@ def decode_input(char,motionProxy):
 
     else:
         gesture_9_nod(motionProxy)
-
-
  
+
+
 def main(robotIP,robotPort):
 
     kinetic_feedbackfile = open('../output/kinetic_feedback.txt', 'w')
@@ -1570,7 +1571,7 @@ def main(robotIP,robotPort):
 
                 elif char ==8:
                     gesture_8_tilt_head(motionProxy)
-                    print "Cover tilt head"                    
+                    print "tilt head"                    
 
                 else:
                     gesture_9_nod(motionProxy)
@@ -1595,8 +1596,6 @@ def main(robotIP,robotPort):
     animatedSpeechProxy.say(data, gesture_confused)
 
 
-
-    end_presentation()
 
 
 
