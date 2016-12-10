@@ -1384,9 +1384,78 @@ def squat(robotIP):
       print err
 
 
-def init():
 
-    #Setting the Proxies
+
+  
+
+
+def begin_presentation():
+    start = False
+    syncFile = open('output/sync.txt', 'r')
+    while not start:
+        # read sync
+        where = syncFile.tell()
+        line = syncFile.readline()
+        if not line or line in ['\n', '\r\n']:
+            time.sleep(1)
+            syncFile.seek(where)
+        else:
+            if line.rstrip('\n') == "start":
+                start = True
+    print "Sync File has announced start"
+
+
+
+def end_presentation():
+    start = False
+    syncFile = open('output/sync.txt', 'r')
+    while not start:
+        # read sync
+        where = syncFile.tell()
+        line = syncFile.readline()
+        if not line or line in ['\n', '\r\n']:
+            time.sleep(1)
+            syncFile.seek(where)
+        else:
+            if line.rstrip('\n') == "end":
+                start = True
+    print "Sync File has announced end"
+
+def decode_input(char,robotIP):
+    if char == 1:
+        gesture_1_handwave(robotIP)
+
+    elif char == 2:
+        gesture_2_attention(robotIP)
+
+    elif char == 3:
+        gesture_3_leaning(robotIP)
+
+    elif char == 4:
+        gesture_4_shrugging(robotIP)
+
+    elif char ==5:
+        gesture_5_arms(robotIP)
+
+    elif char ==6:
+        gesture_6_bored(robotIP)
+
+    elif char ==7:
+        gesture_7_coverears(robotIP)
+
+    elif char ==8:
+        gesture_8_tilt_head(robotIP)
+
+    else char==9:
+        gesture_9_nod(robotIP)
+
+
+ 
+def main(robotIP,robotPort):
+
+    #initialise 
+    print "Initialising NAO"
+        #Setting the Proxies
     try:
         motionProxy = ALProxy("ALMotion", robotIP, robotPort)
     except Exception, e:
@@ -1420,29 +1489,67 @@ def init():
     animatedSpeechProxy.say("Guess who's back, back again", gesture_confused)
 
     #StandUp
-    StandUp(postureProxy)  
+    StandUp(postureProxy)
 
 
-def main(robotIP,robotPort):
-
-    #initialise 
-    print "Initialising NAO"
-    init()
+    begin_presentation()
 
 
 
-    bool loop_run = true;
     print "Begin Presentation"
-    while loop_run = true:
-        #Listening State
-        gesture_9_nod(robotIP)
 
-        #Reads kineticFeedback File
-        kineticFeedbackFile = open(os.path.dirname(os.path.realpath(__file__))+'/kinetic_feedback.txt', 'w')
-        giveFeedback(outputs, kineticFeedbackFile)
+    #Listening State
+    gesture_9_nod(robotIP)
 
-        #if kinetic feedback file output changes
-        
+    #Reads kineticFeedback File
+    start = False
+    kinetic_feedbackfile = open('output/kinetic_feedback.txt', 'r')    
+    while not start:
+        where = kinetic_feedbackfile.tell()
+        line = kinetic_feedbackfile.readline()
+        if not line or line in ['\n','\n']:
+            time.sleep(1)
+            kinetic_feedbackfile(where)
+
+        else:
+            #if kinetic feedback output file changes
+            if line.rstrip('n') != 0:
+                #do output
+                decode_input(line.rstrip('n'),robotIP)
+                start = True
+
+    end_presentation()
+    print "End Presentation"
+
+
+    print "Begin Feedback"
+
+
+    animatedSpeechProxy.say("I will now give an overview of your presentation", gesture_confused)
+
+    animatedSpeechProxy.say("You looked at me ", gesture_confused)
+    
+    "You looked at me" + relevantstats+ "percent of the time." 
+    
+    "You moved your hands" + relevantstats+ "percent of the time." 
+
+    "Your voice was unclear for " + relevantstats+ "percent of the time." 
+
+    "Your speech was too fast for " + relevantstats+ "percent of the time." 
+
+    "Your speech was too slow for " + relevantstats+ "percent of the time."
+
+    "Your speech was too loud for " + relevantstats+ "percent of the time." 
+
+    "Your speech was too soft for " + relevantstats+ "percent of the time." 
+
+    "That was good! Keep it up!"
+    "That wasn't so good, try to improve it next time!"
+    "That's alright, though there's room for improvement!"
+
+
+
+
 
 
     gesture_confused(robotIP)
@@ -1463,6 +1570,7 @@ def main(robotIP,robotPort):
 
 if __name__ == "__main__":
     robotIp = "169.254.121.24" #Set a default IP here
+    # robotIp = "127.0.0.1" #Set a default IP here
     robotPort = 9559 #Set default POort here
 
 
