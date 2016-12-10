@@ -1,6 +1,7 @@
 import os
 import time
 from interruptingcow import timeout
+start_time = 0
 
 # this central processor is tailored to the modules we are expecting.
 # the modules to read:
@@ -22,7 +23,7 @@ def configure(metrics):
         i = 1
         while i < len(configData):
             metrics[m][configData[i]] = float(configData[i+1])
-            print m+" "+configData[i]+" "+configData[i+1]
+            # print m+" "+configData[i]+" "+configData[i+1]
             i += 2
     configFile.close()
 
@@ -38,8 +39,10 @@ def makeFeedbackDecision(metrics, concerningData, feedbackFile):
             # expire old feedback - THIS COULD BE MORE SOPHISTICATED
             if time.time()-i['timestamp'] > expireTime:
                 info.remove(i)
+                print "Removing a concern from "+m
             # it compares the data to the allowance and priority given in config
             # and finds the item that is the greatest outside the allowance and has the highest priority and flags this
+            print m+" "+str(len(info))+" "+str(metrics[m]['priority'])
             if len(info) > metrics[m]['allowance']:
                 if metrics[m]['priority'] < currentPriority:
                     currentFeedback=m+"_"+i['issue']
@@ -61,6 +64,7 @@ def makeFeedbackDecision(metrics, concerningData, feedbackFile):
 
 # function: giveKineticFeedback
 def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
+    global start_time
     # this function givesKineticFeedback based on the inputs
     concerningData = {
         "speed": [],
@@ -71,6 +75,7 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
     }
     stop = False
     # while not told to stop:
+    print "giving feedback, time: "+str(time.time()-start_time)
     while not stop:
         concern = False
         for m, info in metrics.iteritems():
@@ -79,12 +84,13 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
             where = f.tell()
             line = f.readline()
             if not line or line in ['\n', '\r\n']:
-                time.sleep(1)
                 f.seek(where)
+                continue
             else:
                 # saves this data for historical record
                 data = line.rstrip('\n').split()
                 historicalData[m].append(float(data[1]))
+                # print "reading "+m+" "+str(time.time()-float(data[0]))+" seconds after writing"
                 # checks it against thresholds, adds to concerningData if a problem
                 maybeAppend = {"timestamp": float(data[0]), "data": float(data[1])}
                 if "min" in metrics[m]:
@@ -119,6 +125,7 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
 # function: main
 def main():
     # this function is the main control
+    global start_time
     metrics = {
         "speed": {},
         "accuracy": {},
@@ -134,7 +141,7 @@ def main():
         # "gestures": []
     }
 
-    maxtime = 30 # in seconds
+    maxtime = 15 # in seconds
     try: # do the following unless maxtime is reached:
         with timeout(maxtime, exception=RuntimeError):
             # it calls configure, passing in the metrics structure
@@ -153,6 +160,7 @@ def main():
                     if line.rstrip('\n') == "start":
                         start = True
             print "starting"
+            start_time = time.time()
             giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile)
     except RuntimeError:
         print "Stopping: run time exceeded "+str(maxtime)+" seconds"
