@@ -1,3 +1,4 @@
-speech_speed inRange 140 180
-speech_accuracy min 0.8
+speech_speed inRange 140 180 6 5
+speech_volume inRange 60 100 8 7
+speech_accuracy min 0.8 4
 cv_gesture

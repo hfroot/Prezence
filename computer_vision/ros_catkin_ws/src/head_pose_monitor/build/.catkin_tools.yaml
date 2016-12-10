@@ -1,0 +1,6 @@
+devel_space: /home/human/ros_catkin_ws/src/head_pose_monitor/devel
+install: false
+install_space: /home/human/ros_catkin_ws/src/head_pose_monitor/install
+profile: default
+source_space: /home/human/ros_catkin_ws/src/head_pose_monitor/src
+workspace: /home/human/ros_catkin_ws/src/head_pose_monitor

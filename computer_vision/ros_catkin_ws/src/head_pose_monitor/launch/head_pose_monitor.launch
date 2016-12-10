@@ -1,0 +1,20 @@
+<launch>
+
+<!-- launch openni_launch first -->
+	<include file="$(find openni_launch)/launch/openni.launch"/>
+<!-- 			        
+
+<node name="output_topic1" pkg="rostopic" type="rostopic" output="screen" args="echo /head_pose">
+</node>
+
+-->
+
+	<remap from="/depth/image_raw" to="camera/depth/image_raw"/>
+	<remap from="/depth/camera_info" to="camera/depth/camera_info"/>
+  
+  <node pkg="head_pose_estimation" name="head_pose_estimation" type="head_pose_estimation" required="true"/>
+
+  <node pkg="head_pose_monitor" name="head_pose_monitor" type="head_pose_monitor" required="true"/>
+</launch>
+
+

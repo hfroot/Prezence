@@ -8,6 +8,9 @@ import speech_recognition as sr
 import os
 from pprint import pprint
 import audioop
+import re #to do regex
+import time #to do timer
+
 # obtain audio from the microphone
 r = sr.Recognizer()
 with sr.Microphone() as source:
@@ -46,7 +49,52 @@ try:
 	except:
 		rec=(msg_json['alternative'][0]['transcript'])
 		number="0"
-		
+
+#########################CHECK FOR START AND STOP#############################################################################		
+	#Check if user has said "Prezence start" (google thinks Prezence is Presents)
+	starting = re.search('presents? start|presence start', rec, flags=re.I) #flag to ignore any upper or lower-casing the speech recogniser
+	#Check if user said "Prezence stop"
+	ending = re.search('presents? stop|presence stop', rec, flags=re.I)
+	if(starting != None):
+		try:
+			startfile = open('startrobot.txt', 'w')
+			startfile.write(str(long(float(time.time()))))
+			print 'startfile created'
+			startfile.close()
+		except IOError:
+			print "creating startfile went wrong"
+			sys.exit(1)
+	elif(ending != None):
+		try:
+			startfile = open('startrobot.txt','r')
+			endfile = open('endrobot.txt', 'w')
+			endtime = long(float(time.time()))
+			starttime = long(startfile.readline())
+			endfile.write(str(endtime))
+			startfile.close()
+			endfile.close()
+			
+			timediff = endtime - starttime
+			timediff_min = long(timediff / 60)
+			timediff_sec = timediff % 60
+			print 'endfile created'
+			print 'It took ' + str(timediff_min) + 'min' + str(timediff_sec) + 'sec'
+			
+		except IOError:
+			print "creating endfile went wrong"
+			sys.exit(1)
+	#else:
+	#	try:
+	#		os.remove('startrobot.txt')
+	#	except OSError:
+	#		print "startrobot doesn't exist"
+	#	
+	#	try:
+	#		os.remove('endrobot.txt')
+	#	except OSError:
+	#		print "endrobot doesn't exist"
+################END OF START STOP#############################################################################
+
 	try:
 	    f = open ("speechout.txt", "w")
 	except IOError:
@@ -56,8 +104,6 @@ try:
 	print("confice level is:" + str(number) +" for " + rec )
 	f.write("confice level is:" + str(number) + '\n')
 	f.write(rec + '\n')
-	
-	
 	
 	#fast/slow speaking
 	space_split=len(rec.split(" "))
