@@ -1,4 +1,4 @@
-speech_speed inRange 140 180 6 5
-speech_volume inRange 60 100 8 7
-speech_accuracy min 0.8 4
-cv_gesture
+speed min 140 max 180 allowance 6 priority 3
+volume min 60 max 100 allowance 8 priority 2
+accuracy min 0.8 allowance 4 priority 1
+head_gaze min 100 max 200 allowance 3 priority 4
