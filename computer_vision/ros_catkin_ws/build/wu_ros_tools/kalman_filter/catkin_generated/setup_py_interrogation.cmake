@@ -1,0 +1,6 @@
+set(kalman_filter_SETUP_PY_VERSION "0.2.4")
+set(kalman_filter_SETUP_PY_SCRIPTS "")
+set(kalman_filter_SETUP_PY_PACKAGES "kalman_filter")
+set(kalman_filter_SETUP_PY_PACKAGE_DIRS "src/kalman_filter")
+set(kalman_filter_SETUP_PY_MODULES "")
+set(kalman_filter_SETUP_PY_MODULE_DIRS "")

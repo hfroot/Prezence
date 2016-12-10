@@ -1,0 +1,8 @@
+Symlinking /home/human/ros_catkin_ws/src/head_pose_monitor/devel/./setup.zsh
+Symlinking /home/human/ros_catkin_ws/src/head_pose_monitor/devel/./setup.sh
+Symlinking /home/human/ros_catkin_ws/src/head_pose_monitor/devel/./env.sh
+Symlinking /home/human/ros_catkin_ws/src/head_pose_monitor/devel/./_setup_util.py
+Symlinking /home/human/ros_catkin_ws/src/head_pose_monitor/devel/./setup.bash
+Symlinking /home/human/ros_catkin_ws/src/head_pose_monitor/devel/share/catkin_tools_prebuild/cmake/catkin_tools_prebuildConfig.cmake
+Symlinking /home/human/ros_catkin_ws/src/head_pose_monitor/devel/share/catkin_tools_prebuild/cmake/catkin_tools_prebuildConfig-version.cmake
+Symlinking /home/human/ros_catkin_ws/src/head_pose_monitor/devel/lib/pkgconfig/catkin_tools_prebuild.pc
