@@ -1235,6 +1235,33 @@ def gesture_confused(robotIP):
     except BaseException, err:
       print err
 
+def check_input(outputs, feedbackMap, kineticFeedbackFile):
+    for name, info in outputs.iteritems():
+        # the following inspired by the soln: http://code.activestate.com/recipes/157035-tail-f-in-python/
+        f = info["file"];
+        where = f.tell()
+        line = f.readline()
+        if not line or line in ['\n', '\r\n']:
+            time.sleep(1)
+            f.seek(where)
+        else:
+            print name+': '+str(line), # already has newline
+            if line.rstrip('\n') == "stop":
+                return 1
+            if "checkType" in info:
+                checkType = info["checkType"]
+                if checkType == "min":
+                    if float(line.rstrip('\n')) < info["data"]:
+                        print name+" is too low!"
+                        kineticFeedbackFile.write(str(feedbackMap[name])+"\n")
+                elif checkType == "inRange":
+                    if float(line.rstrip('\n')) < info["data"][0]:
+                        print name+" is too low"
+                        kineticFeedbackFile.write(str(feedbackMap[name+"-low"])+"\n")
+                    elif float(line.rstrip('\n')) > info["data"][1]:
+                        print name+" is too high"
+                        kineticFeedbackFile.write(str(feedbackMap[name+"-high"])+"\n")
+    return 0
 
 def squat(robotIP):
 
@@ -1390,7 +1417,7 @@ def init():
     motionProxy.wakeUp()
 
     # say the text with the local configuration
-    # animatedSpeechProxy.say("Don't be angry, please", gesture_confused)
+    animatedSpeechProxy.say("Guess who's back, back again", gesture_confused)
 
     #StandUp
     StandUp(postureProxy)  
@@ -1399,59 +1426,36 @@ def init():
 def main(robotIP,robotPort):
 
     #initialise 
+    print "Initialising NAO"
     init()
 
 
 
+    bool loop_run = true;
+    print "Begin Presentation"
+    while loop_run = true:
+        #Listening State
+        gesture_9_nod(robotIP)
 
- 
+        #Reads kineticFeedback File
+        kineticFeedbackFile = open(os.path.dirname(os.path.realpath(__file__))+'/kinetic_feedback.txt', 'w')
+        giveFeedback(outputs, kineticFeedbackFile)
 
-    # #Walk 1 Meter
-    # Walk(motionProxy,1,0,0)
+        #if kinetic feedback file output changes
+        
 
-
-    # gesture_1_handwave(robotIP)
-    # StandUp(postureProxy)
-    
-
-    # gesture_2(robotIP)
-    # StandUp(postureProxy)
-
-    # gesture_3(robotIP)
-    # StandUp(postureProxy)
-
-    # gesture_4(robotIP)
-    # StandUp(postureProxy)
-
-    # gesture_5(robotIP)
-    # StandUp(postureProxy)
-
-    # gesture_6(robotIP)
-    # StandUp(postureProxy)
-
-    # gesture_7(robotIP)
-    # StandUp(postureProxy)
-
-    # gesture_8(robotIP)
-    # StandUp(postureProxy)
 
     gesture_confused(robotIP)
     StandUp(postureProxy)
 
-
-
     # ttsProxy.say("Shut up weicong")
 
-    # #StandUp
     # StandUp(postureProxy)
 
-    # # #Sit Down
     # squat(robotIP)
-
 
     # SitDown(postureProxy)
 
-    # # # Turn off the Motors
     # StiffnessOff(motionProxy)
 
     motionProxy.rest()
