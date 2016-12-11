@@ -1887,7 +1887,7 @@ def main(robotIP,robotPort):
     # motionProxy.rest()
 
     #==================Check for Presentation to Begin===========================
-
+    time.sleep(5)
     start = False
     syncFile = open('output/sync.txt', 'r')
     while not start:
