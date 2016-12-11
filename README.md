@@ -37,6 +37,9 @@ Writes to [output](output)/kinetic_feedback.txt with values from 1 to 9 when nee
 #### Synchronisation
 Speech script writes to [output](output)/sync.txt with start or stop on a new line. Everyone else monitors this file to know when to start and stop recording.
 
+#### Note about [computer_vision](computer_vision)
+The file contained in this folder is a copy of what Max is changing to run his module. There are many dependencies outside of this that are contained on the shared laptop, no point in committing because it requires set up.
+
 ## Proposed structure
 The script [script/start.sh](script/start.sh) will start all of the programs in parallel. Please add your start command, with the correct path relative to the main Prezence folder, to this line. 
 All the modules will need to monitor [output](output)/sync.txt to know when to start and stop. 
