@@ -153,6 +153,27 @@ def givePostFeedback(historicalData, metrics):
                 total += d
             avg = int(round(total/len(dataList)))
             feedbackList.append("On average, you spoke at " + str(avg) + " words per minute.\n")
+        elif m == "volume":
+            totalLow = 0
+            totalHigh = 0
+            for d in dataList:
+                totalLow += ( d < metrics[m]["min"] )
+                totalHigh += ( d > metrics[m]["max"] )
+            pLow = int(round(float(totalLow)/len(dataList)*100))
+            pHigh = int(round(float(totalHigh)/len(dataList)*100))
+            threshold = 5 # a certain amount of allowance
+            if pLow > threshold and totalLow > totalHigh:
+                feedbackList.append("You spoke too quietly "+str(pLow)+" percent of the time, you can improve!")
+            elif pHigh > threshold and totalHigh > totalLow:
+                feedbackList.append("You spoke too loudly "+str(pHigh)+" percent of the time, you can improve!")
+        elif m == "accuracy":
+            total = 0
+            for d in dataList:
+                total += ( d < metrics[m]["min"] )
+            percent = int(round(float(total)/len(dataList) * 100))
+            threshold = 1
+            if percent > threshold:
+                feedbackList.append("I couldn't understand you "+str(percent)+" of the time, be careful!")
     # and writes these strings to file
     file = open("output/postspeech_feedback.txt", 'w')
     for f in feedbackList:
