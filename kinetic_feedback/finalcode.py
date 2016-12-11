@@ -4,7 +4,7 @@ import math
 # import almath as m # python's wrapping of almath
 import sys
 from naoqi import ALProxy
-
+import time
 
 def StiffnessOn(proxy):
     # We use the "Body" name to signify the collection of all joints
@@ -31,7 +31,7 @@ def Walk(proxy,x,y,theta):
     # self.onStopped()
 
 
-def gesture_1_handwave(robotIP) :
+def gesture_1_handwave(motionProxy) :
 
     # Choregraphe simplified export in Python.
     names = list()
@@ -143,15 +143,11 @@ def gesture_1_handwave(robotIP) :
     keys.append([0.0597839])
 
     try:
-      # uncomment the following line and modify the IP if you use this script outside Choregraphe.
-      motion = ALProxy("ALMotion", robotIP, 9559)
-        #motion = ALProxy("ALMotion")
-      motion.angleInterpolation(names, keys, times, True)
+      motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
 
-
-def gesture_2_attention(robotIP):
+def gesture_2_attention(motionProxy):
 
     # Choregraphe simplified export in Python.
     names = list()
@@ -263,16 +259,11 @@ def gesture_2_attention(robotIP):
     keys.append([0.0521979, -0.0322559])
 
     try:
-      # uncomment the following line and modify the IP if you use this script outside Choregraphe.
-      motion = ALProxy("ALMotion", robotIP, 9559)
-        #motion = ALProxy("ALMotion")
-      motion.angleInterpolation(names, keys, times, True)
+      motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
 
-
-def gesture_3_leaning(robotIP):
-
+def gesture_3_leaning(motionProxy):
     # Choregraphe simplified export in Python.
     names = list()
     times = list()
@@ -384,16 +375,11 @@ def gesture_3_leaning(robotIP):
 
 
     try:
-      # uncomment the following line and modify the IP if you use this script outside Choregraphe.
-      motion = ALProxy("ALMotion", robotIP, 9559)
-        #motion = ALProxy("ALMotion")
-      motion.angleInterpolation(names, keys, times, True)
+      motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
 
-
-def gesture_4_shrugging(robotIP):
-
+def gesture_4_shrugging(motionProxy):
     # Choregraphe simplified export in Python.
     names = list()
     times = list()
@@ -504,15 +490,11 @@ def gesture_4_shrugging(robotIP):
     keys.append([-0.096684])
 
     try:
-      # uncomment the following line and modify the IP if you use this script outside Choregraphe.
-      motion = ALProxy("ALMotion", robotIP, 9559)
-        #motion = ALProxy("ALMotion")
-      motion.angleInterpolation(names, keys, times, True)
+      motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
 
-
-def gesture_5_arms(robotIP):
+def gesture_5_arms(motionProxy):
 
     # Choregraphe simplified export in Python.
     names = list()
@@ -623,18 +605,12 @@ def gesture_5_arms(robotIP):
     times.append([0.68, 2.12, 3.68, 6.12, 9.56])
     keys.append([-0.45564, -0.070606, -0.455641, -0.0706061, -0.455641])
 
-
     try:
-      # uncomment the following line and modify the IP if you use this script outside Choregraphe.
-      motion = ALProxy("ALMotion", robotIP, 9559)
-        #motion = ALProxy("ALMotion")
-      motion.angleInterpolation(names, keys, times, True)
+      motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
 
-
-def gesture_6_bored(robotIP):
-
+def gesture_6_bored(motionProxy):
     # Choregraphe simplified export in Python.
     names = list()
     times = list()
@@ -744,18 +720,12 @@ def gesture_6_bored(robotIP):
     times.append([0.6])
     keys.append([0.262272])
 
-
     try:
-      # uncomment the following line and modify the IP if you use this script outside Choregraphe.
-      motion = ALProxy("ALMotion", robotIP, 9559)
-        #motion = ALProxy("ALMotion")
-      motion.angleInterpolation(names, keys, times, True)
+      motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
 
-
-def gesture_7_coverears(robotIP):
-
+def gesture_7_coverears(motionProxy):
     # Choregraphe simplified export in Python.
     names = list()
     times = list()
@@ -865,18 +835,12 @@ def gesture_7_coverears(robotIP):
     times.append([0.6, 0.64])
     keys.append([0.262272, 0.964844])
 
-
     try:
-      # uncomment the following line and modify the IP if you use this script outside Choregraphe.
-      motion = ALProxy("ALMotion", robotIP, 9559)
-        #motion = ALProxy("ALMotion")
-      motion.angleInterpolation(names, keys, times, True)
+      motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
 
-
-def gesture_8_tilt_head(robotIP):
-
+def gesture_8_tilt_head(motionProxy):
     # Choregraphe simplified export in Python.
     names = list()
     times = list()
@@ -986,17 +950,12 @@ def gesture_8_tilt_head(robotIP):
     times.append([0.6, 0.64, 0.68, 0.8])
     keys.append([0.262272, 0.076658, -0.0322559, 0.0475121])
 
-
     try:
-      # uncomment the following line and modify the IP if you use this script outside Choregraphe.
-      motion = ALProxy("ALMotion", robotIP, 9559)
-        #motion = ALProxy("ALMotion")
-      motion.angleInterpolation(names, keys, times, True)
+      motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
 
-
-def gesture_9_nod(robotIP):
+def gesture_9_nod(motionProxy):
 
     # Choregraphe simplified export in Python.
     names = list()
@@ -1107,16 +1066,12 @@ def gesture_9_nod(robotIP):
     times.append([0.6])
     keys.append([0.0597839])
 
-
     try:
-      # uncomment the following line and modify the IP if you use this script outside Choregraphe.
-      motion = ALProxy("ALMotion", robotIP, 9559)
-        #motion = ALProxy("ALMotion")
-      motion.angleInterpolation(names, keys, times, True)
+      motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
 
-def gesture_confused(robotIP):
+def gesture_confused(motionProxy):
 
     # Choregraphe simplified export in Python.
     names = list()
@@ -1228,42 +1183,11 @@ def gesture_confused(robotIP):
     keys.append([0.314428, 0.30369, 0.30369, 0.297554])
 
     try:
-      # uncomment the following line and modify the IP if you use this script outside Choregraphe.
-      motion = ALProxy("ALMotion", robotIP, 9559)
-        #motion = ALProxy("ALMotion")
-      motion.angleInterpolation(names, keys, times, True)
+      motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
 
-def check_input(outputs, feedbackMap, kineticFeedbackFile):
-    for name, info in outputs.iteritems():
-        # the following inspired by the soln: http://code.activestate.com/recipes/157035-tail-f-in-python/
-        f = info["file"];
-        where = f.tell()
-        line = f.readline()
-        if not line or line in ['\n', '\r\n']:
-            time.sleep(1)
-            f.seek(where)
-        else:
-            print name+': '+str(line), # already has newline
-            if line.rstrip('\n') == "stop":
-                return 1
-            if "checkType" in info:
-                checkType = info["checkType"]
-                if checkType == "min":
-                    if float(line.rstrip('\n')) < info["data"]:
-                        print name+" is too low!"
-                        kineticFeedbackFile.write(str(feedbackMap[name])+"\n")
-                elif checkType == "inRange":
-                    if float(line.rstrip('\n')) < info["data"][0]:
-                        print name+" is too low"
-                        kineticFeedbackFile.write(str(feedbackMap[name+"-low"])+"\n")
-                    elif float(line.rstrip('\n')) > info["data"][1]:
-                        print name+" is too high"
-                        kineticFeedbackFile.write(str(feedbackMap[name+"-high"])+"\n")
-    return 0
-
-def squat(robotIP):
+def squat(motionProxy):
 
     # Choregraphe simplified export in Python.
     names = list()
@@ -1376,16 +1300,76 @@ def squat(robotIP):
 
 
     try:
-      # uncomment the following line and modify the IP if you use this script outside Choregraphe.
-      motion = ALProxy("ALMotion", robotIP, 9559)
-        #motion = ALProxy("ALMotion")
-      motion.angleInterpolation(names, keys, times, True)
+      motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
 
+def begin_presentation():
+    start = False
+    syncFile = open('output/sync.txt', 'r')
+    while not start:
+        # read sync
+        where = syncFile.tell()
+        line = syncFile.readline()
+        if not line or line in ['\n', '\r\n']:
+            time.sleep(1)
+            syncFile.seek(where)
+        else:
+            if line.rstrip('\n') == "start":
+                start = True
+    print "Sync File has announced start"
 
-def init():
+def end_presentation():
+    start = False
+    syncFile = open('output/sync.txt', 'r')
+    while not start:
+        # read sync
+        where = syncFile.tell()
+        line = syncFile.readline()
+        if not line or line in ['\n', '\r\n']:
+            time.sleep(1)
+            syncFile.seek(where)
+        else:
+            if line.rstrip('\n') == "end":
+                start = True
+    print "Sync File has announced end"
 
+def decode_input(char,motionProxy):
+    if char == 1:
+        gesture_1_handwave(motionProxy)
+
+    elif char == 2:
+        gesture_2_attention(motionProxy)
+
+    elif char == 3:
+        gesture_3_leaning(motionProxy)
+
+    elif char == 4:
+        gesture_4_shrugging(motionProxy)
+
+    elif char ==5:
+        gesture_5_arms(motionProxy)
+
+    elif char ==6:
+        gesture_6_bored(motionProxy)
+
+    elif char ==7:
+        gesture_7_coverears(motionProxy)
+
+    elif char ==8:
+        gesture_8_tilt_head(motionProxy)
+
+    else:
+        gesture_9_nod(motionProxy)
+ 
+def main(robotIP,robotPort):
+
+    kinetic_feedbackfile = open('../output/kinetic_feedback.txt', 'w')
+    kinetic_feedbackfile.close()
+
+
+    #==================initialise the NAO===========================
+    print "Initialising NAO"
     #Setting the Proxies
     try:
         motionProxy = ALProxy("ALMotion", robotIP, robotPort)
@@ -1413,40 +1397,133 @@ def init():
         print "Error was: ", e
 
     # Turn on the Motors
-    # StiffnessOn(motionProxy)
     motionProxy.wakeUp()
 
     # say the text with the local configuration
     animatedSpeechProxy.say("Guess who's back, back again", gesture_confused)
 
     #StandUp
-    StandUp(postureProxy)  
-
-
-def main(robotIP,robotPort):
-
-    #initialise 
-    print "Initialising NAO"
-    init()
-
-
-
-    bool loop_run = true;
-    print "Begin Presentation"
-    while loop_run = true:
-        #Listening State
-        gesture_9_nod(robotIP)
-
-        #Reads kineticFeedback File
-        kineticFeedbackFile = open(os.path.dirname(os.path.realpath(__file__))+'/kinetic_feedback.txt', 'w')
-        giveFeedback(outputs, kineticFeedbackFile)
-
-        #if kinetic feedback file output changes
-        
-
-
-    gesture_confused(robotIP)
     StandUp(postureProxy)
+    motionProxy.rest()
+
+
+    #==================Check for Presentation to Begin===========================
+
+    start = False
+    syncFile = open('../output/sync.txt', 'r')
+    while not start:
+        # read sync
+        where = syncFile.tell()
+        line = syncFile.readline()
+        if not line or line in ['\n', '\r\n']:
+            time.sleep(1)
+            syncFile.seek(where)
+        else:
+            if line.rstrip('\n') == "start":
+                start = True
+    print "Sync File has announced start"
+    print "Begin Presentation"
+
+
+    # Turn on the Motors
+    motionProxy.wakeUp()
+    animatedSpeechProxy.say("Begin Presentation", gesture_confused)
+
+
+
+    #================== Detecting inputs ===========================
+
+    # #Listening State
+    # gesture_9_nod(motionProxy)
+
+    #Reads kineticFeedback File
+    stop = False
+    kinetic_feedbackfile = open('../output/kinetic_feedback.txt', 'r')
+
+    while not stop:
+        where = kinetic_feedbackfile.tell()
+        line = kinetic_feedbackfile.readline()
+        syncwhere = syncFile.tell()
+        syncline = syncFile.readline()
+        #Checks for new inputs into kinect file
+        if not line or line in ['\n','\n']:
+            time.sleep(1)
+            kinetic_feedbackfile.seek(where)
+            gesture_9_nod(motionProxy) #Goes to listening state
+        else:
+            #if kinetic feedback output file changes
+            print "perform function"
+            if line.rstrip('\n') != 0:
+                #do output
+                # decode_input(line.rstrip('\n'),robotIP)
+            
+                char  = int(line.rstrip('\n'))
+                if char == 1:
+                    gesture_1_handwave(motionProxy)
+                    print "handwave gesture"
+
+                elif char == 2:
+                    gesture_2_attention(motionProxy)
+                    print "attention"
+
+                elif char == 3:
+                    gesture_3_leaning(motionProxy)
+                    print "leaning"
+
+                elif char == 4:
+                    gesture_4_shrugging(motionProxy)
+                    print "shrugging"
+
+                elif char ==5:
+                    gesture_5_arms(motionProxy)
+                    print "raise up and down"
+
+                elif char ==6:
+                    gesture_6_bored(motionProxy)
+                    print "Bored"                    
+
+                elif char ==7:
+                    gesture_7_coverears(motionProxy)
+                    print "Cover ears"                    
+
+                elif char ==8:
+                    gesture_8_tilt_head(motionProxy)
+                    print "tilt head"                    
+
+                else:
+                    gesture_9_nod(motionProxy)
+                    print "Nodding Head and standing chill" 
+
+        if not syncline or syncline in ['\n','\n']:
+            time.sleep(1)
+            syncFile.seek(syncwhere)
+        else:
+            if syncline.rstrip('\n') == "stop":
+                stop = True
+            
+
+    print "End Presentation"
+
+
+    print "Begin Post-Speech Feedback"
+
+    postspeech_feedbackfile = open('../output/postspeech_feedback.txt', 'r')    
+    
+    data=postspeech_feedbackfile.read()
+
+    animatedSpeechProxy.say(data, gesture_confused)
+
+    print "End Post-Speech Feedback, Terminating Robot"
+
+
+
+
+
+
+
+
+    # gesture_confused(robotIP)
+    # StandUp(postureProxy)
 
     # ttsProxy.say("Shut up weicong")
 
@@ -1462,18 +1539,19 @@ def main(robotIP,robotPort):
 
 
 if __name__ == "__main__":
-    robotIp = "169.254.121.24" #Set a default IP here
-    robotPort = 9559 #Set default POort here
+    robotIp = "127.0.0.1" #Set a default IP here
+    # robotIp = "127.0.0.1" #Set a default IP here
+    robotPort = 35955 #Set default POort here
 
 
-    # if len(sys.argv) < 2:
-    #     print "Usage python robotIP please"
-    # else:
-    #     robotIp = sys.argv[1]
+    if len(sys.argv) < 2:
+        print "Usage python robotIP please"
+    else:
+        robotIp = sys.argv[1]
 
-    # if len(sys.argv) > 2:
-    #     print "Usage python robotPort please"
-    # else:
-    #     robotPort = int(sys.argv[2])
+    if len(sys.argv) > 2:
+        print "Usage python robotPort please"
+    else:
+        robotPort = int(sys.argv[2])
 
     main(robotIp, robotPort)
