@@ -20,10 +20,13 @@ So that the robot can be run with one command from one laptop, I've created a st
 Writes to [output](output)/speed.txt at regular intervals with speed in words per minute as an integer.
 
 #### Speech accuracy
-Writes to [output](output)/accuracy.txt at regular intervals with a confidence level between 0 and 1.
+Writes to [output](output)/clarity.txt at regular intervals with a confidence level between 0 and 1.
 
 #### Speech volume
 Writes to [output](output)/volume.txt at regular intervals with an absolute value between 0 and 10000.
+
+#### TIME TAKEN
+NOTE: speech module now records the time at the end of execution into the last line in 'time.txt', happens every presentation independently of any other factors 
 
 #### Gestures
 Writes to [output](output)/gestures.txt. Gestures being monitored: facing away, folded arms, gesticulating, moving, covering mouth, hands in pockets, shifting weight?. Written whenever there is a change or every 30 seconds. 
