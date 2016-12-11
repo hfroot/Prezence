@@ -1918,6 +1918,7 @@ def main(robotIP,robotPort):
         syncline = syncFile.readline()
         #Checks for new inputs into kinect file
         if not line or line in ['\n','\n']:
+            print "No new line detected in Kinetic Feedback"
             time.sleep(1)
             kinetic_feedbackfile.seek(where)
             gesture_9_nod(motionProxy) #Goes to listening state
@@ -1964,10 +1965,12 @@ def main(robotIP,robotPort):
                     print "Nodding Head and standing chill" 
 
         if not syncline or syncline in ['\n','\n']:
+            print "No new line detected in Sync File"
             time.sleep(1)
             syncFile.seek(syncwhere)
         else:
             if syncline.rstrip('\n') == "stop":
+                print "New line detected in sync file"
                 stop = True
             
 
