@@ -1718,7 +1718,7 @@ def decode_input(char,motionProxy):
  
 def main(robotIP,robotPort):
 
-    # kinetic_feedbackfile = open('output/kinetic_feedback.txt', 'w')
+    # kinetic_feedbackfile = open('../output/kinetic_feedback.txt', 'w')
     # kinetic_feedbackfile.close()
 
 
@@ -1753,17 +1753,65 @@ def main(robotIP,robotPort):
     # Turn on the Motors
     motionProxy.wakeUp()
 
-    say the text with the local configuration
-    animatedSpeechProxy.say("Guess who's back, back again", gesture_confused)
+    # say the text with the local configuration
+    # animatedSpeechProxy.say("Guess who's back, back again", gesture_confused)
 
     #StandUp
     StandUp(postureProxy)
     # motionProxy.rest()
 
+    gesture_1_handwave(motionProxy)
+    print "handwave gesture"
+
+    time.sleep(1)
+
+    gesture_2_attention(motionProxy)
+    print "attention"
+
+    time.sleep(1)
+
+
+    gesture_3_leaning(motionProxy)
+    print "leaning"
+
+    time.sleep(1)
+
+
+    gesture_4_shrugging(motionProxy)
+    print "shrugging"
+
+    time.sleep(1)
+
+
+    gesture_5_arms(motionProxy)
+    print "raise up and down"
+
+    time.sleep(1)
+
+
+    gesture_6_bored(motionProxy)
+    print "Bored"                    
+
+    time.sleep(1)
+
+
+    gesture_7_coverears(motionProxy)
+    print "Cover ears"                    
+
+    time.sleep(1)
+
+
+    gesture_8_tilt_head(motionProxy)
+    print "tilt head"                    
+
+    gesture_9_nod(motionProxy)
+    print "Nodding Head and standing chill" 
+
+
     #==================Check for Presentation to Begin===========================
 
     start = False
-    syncFile = open('output/sync.txt', 'r')
+    syncFile = open('../output/sync.txt', 'r')
     while not start:
         # read sync
         where = syncFile.tell()
@@ -1777,13 +1825,21 @@ def main(robotIP,robotPort):
     print "Sync File has announced start"
     print "Begin Presentation"
 
+
+    # Turn on the Motors
+    motionProxy.wakeUp()
     animatedSpeechProxy.say("Begin Presentation", gesture_confused)
+
+
 
     #================== Detecting inputs ===========================
 
+    # #Listening State
+    # gesture_9_nod(motionProxy)
+
     #Reads kineticFeedback File
     stop = False
-    kinetic_feedbackfile = open('output/kinetic_feedback.txt', 'r')
+    kinetic_feedbackfile = open('../output/kinetic_feedback.txt', 'r')
 
     while not stop:
         where = kinetic_feedbackfile.tell()
@@ -1799,7 +1855,9 @@ def main(robotIP,robotPort):
             #if kinetic feedback output file changes
             print "perform function"
             if line.rstrip('\n') != 0:
-                #do output            
+                #do output
+                # decode_input(line.rstrip('\n'),robotIP)
+            
                 char  = int(line.rstrip('\n'))
                 if char == 1:
                     gesture_1_handwave(motionProxy)
@@ -1851,27 +1909,33 @@ def main(robotIP,robotPort):
 
     print "Begin Post-Speech Feedback"
 
-    postspeech_feedbackfile = open('output/postspeech_feedback.txt', 'r')    
+    # postspeech_feedbackfile = open('../output/postspeech_feedback.txt', 'r')    
     
-    data=postspeech_feedbackfile.read()
+    # data=postspeech_feedbackfile.read()
 
-    animatedSpeechProxy.say(data, gesture_confused)
+    # animatedSpeechProxy.say(data, gesture_confused)
 
     print "End Post-Speech Feedback, Terminating Robot"
 
 
-    # gesture_confused(robotIP)
-    # StandUp(postureProxy)
+
+
+
+
+
+
+    gesture_confused(robotIP)
+    StandUp(postureProxy)
 
     ttsProxy.say("Shut up weicong")
 
-    # StandUp(postureProxy)
+    StandUp(postureProxy)
 
-    # squat(robotIP)
+    squat(robotIP)
 
-    # SitDown(postureProxy)
+    SitDown(postureProxy)
 
-    # StiffnessOff(motionProxy)
+    StiffnessOff(motionProxy)
 
     motionProxy.rest()
 

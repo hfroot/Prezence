@@ -1718,7 +1718,7 @@ def decode_input(char,motionProxy):
  
 def main(robotIP,robotPort):
 
-    # kinetic_feedbackfile = open('output/kinetic_feedback.txt', 'w')
+    # kinetic_feedbackfile = open('../output/kinetic_feedback.txt', 'w')
     # kinetic_feedbackfile.close()
 
 
@@ -1763,7 +1763,7 @@ def main(robotIP,robotPort):
     #==================Check for Presentation to Begin===========================
 
     start = False
-    syncFile = open('output/sync.txt', 'r')
+    syncFile = open('../output/sync.txt', 'r')
     while not start:
         # read sync
         where = syncFile.tell()
@@ -1783,7 +1783,7 @@ def main(robotIP,robotPort):
 
     #Reads kineticFeedback File
     stop = False
-    kinetic_feedbackfile = open('output/kinetic_feedback.txt', 'r')
+    kinetic_feedbackfile = open('../output/kinetic_feedback.txt', 'r')
 
     while not stop:
         where = kinetic_feedbackfile.tell()
@@ -1851,7 +1851,7 @@ def main(robotIP,robotPort):
 
     print "Begin Post-Speech Feedback"
 
-    postspeech_feedbackfile = open('output/postspeech_feedback.txt', 'r')    
+    postspeech_feedbackfile = open('../output/postspeech_feedback.txt', 'r')    
     
     data=postspeech_feedbackfile.read()
 
