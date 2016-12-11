@@ -2,7 +2,18 @@ import os
 import time
 from interruptingcow import timeout
 start_time = 0
-
+ROBOT_DELAY = 7
+lastFeedback = 0
+FEEDBACK_MAP = {
+    "head_gaze_low": 1,
+    "gestures_high": 2,
+    "posture_low": 3,
+    "accuracy_low": 4,
+    "speed_high": 5,
+    "volume_high": 7,
+    "speed_low": 6,
+    "volume_low": 8
+}
 # this central processor is tailored to the modules we are expecting.
 # the modules to read:
     # speed
@@ -50,19 +61,11 @@ def makeFeedbackDecision(metrics, concerningData, feedbackFile):
                     currentPriority=metrics[m]['priority']
                     currentMetric=m
     print "Feedback will be for: "+currentFeedback
+    global lastFeedback
     if currentFeedback != "":
         # at the end, the flagged data is used to look up the correct response from the feedbackMap and writes to the file
-        feedbackMap = {
-            "head_gaze_low": 1,
-            "gestures_high": 2,
-            "posture_low": 3,
-            "accuracy_low": 4,
-            "speed_high": 5,
-            "volume_high": 7,
-            "speed_low": 6,
-            "volume_low": 8
-        }
-        feedbackFile.write(str(feedbackMap[currentFeedback])+"\n")
+        lastFeedback = time.time()
+        feedbackFile.write(str(FEEDBACK_MAP[currentFeedback])+"\n")
         feedbackFile.flush()
         # want to remove all the previous concerns about this issue because theoretically they've learned now
         concerningData[currentMetric] = []
@@ -108,8 +111,12 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
                         maybeAppend['issue'] = "high"
                         concerningData[m].append(maybeAppend)
                         print m+" concerningly high"
+        global lastFeedback
         if concern:
-            makeFeedbackDecision(metrics, concerningData, feedbackFile)
+            if time.time() - lastFeedback > ROBOT_DELAY:
+                makeFeedbackDecision(metrics, concerningData, feedbackFile)
+            else:
+                print "Robot probably not ready"
         # check if sync has said to stop
         swhere = syncFile.tell()
         sline = syncFile.readline()
