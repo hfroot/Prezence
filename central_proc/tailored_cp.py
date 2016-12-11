@@ -41,7 +41,6 @@ def configure(metrics):
 # function: makeFeedbackDecision
 def makeFeedbackDecision(metrics, concerningData, feedbackFile):
     # this function analyses concerningData to determine the best feedback to give
-    print "need to make a decision"
     expireTime=10
     currentPriority=100
     currentFeedback=""
@@ -51,7 +50,7 @@ def makeFeedbackDecision(metrics, concerningData, feedbackFile):
             # expire old feedback - THIS COULD BE MORE SOPHISTICATED
             if time.time()-i['timestamp'] > expireTime:
                 info.remove(i)
-                print "Removing a concern from "+m
+                # print "Removing a concern from "+m
             # it compares the data to the allowance and priority given in config
             # and finds the item that is the greatest outside the allowance and has the highest priority and flags this
             # print m+" "+str(len(info))+" "+str(metrics[m]['priority'])
@@ -90,14 +89,14 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
             f = info['file']
             where = f.tell()
             line = f.readline()
-            if not line or line in ['\n', '\r\n']:
-                f.seek(where)
-            else:
-                # saves this data for historical record
-                data = line.rstrip('\n').split()
-                if len(data) < 2:
-                    print "There was an issue reading "+m+" the previous data point will be invalid"
+            while not (not line or line in ['\n', '\r\n']):
+                # Sometimes the whole line isn't read, this fixes the error
+                if not line.endswith('\n'):
+                    suffix = f.readline()
+                    line = line + suffix
+                    f.seek(f.tell())
                     continue
+                data = line.rstrip('\n').split()
                 historicalData[m].append(float(data[1]))
                 print "reading "+m+" "+str(time.time()-float(data[0]))+" seconds after writing"
                 # checks it against thresholds, adds to concerningData if a problem
@@ -114,6 +113,8 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
                         maybeAppend['issue'] = "high"
                         concerningData[m].append(maybeAppend)
                         print m+" concerningly high"
+                line = f.readline()
+                f.seek(f.tell())
         global lastFeedback
         if concern:
             if time.time() - lastFeedback > ROBOT_DELAY:
