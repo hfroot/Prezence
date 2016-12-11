@@ -13,6 +13,13 @@ import re #to do regex
 import time #to do timer
 import fileinput
 
+def countlines(startstopfile):
+	with open(startstopfile) as f:
+		lines = 0
+		for i, l in enumerate(f):
+			lines = lines + 1
+	return lines
+
 #REMEMBER TO RUN IN SPEECH FOLDER BECAUSE OF THE WAY FILES ARE ADDRESSED AND CREATED
 
 # try:
@@ -47,7 +54,13 @@ except IOError:
 # obtain audio from the microphone
 r = sr.Recognizer()
 
-with sr.Microphone() as source:
+m = 0
+for i, microphone_name in enumerate(sr.Microphone.list_microphone_names()):
+	if microphone_name == "USB audio CODEC: Audio (hw:1,0)":
+		m = i
+		break
+
+with sr.Microphone(device_index=m, sample_rate = 16000, chunk_size = 1024) as source:
 	print("KEEP QUIET! MIC CALIBRATION")
 	timer_HCR = int(os.getenv('timer' , 5)) #time to listen for in seconds
 	#timer_HCR=int(timer_HCR)
@@ -59,43 +72,52 @@ background_noise = audioop.rms(audioasstring, 2) #2 means 2 bytes per sample i.e
 		
 
 presentation_start = False
+print("Waiting for start signal \n")
 
 ######################END OF INIT###################################################
 
 #########################CHECK FOR START AND STOP#############################################################################
 while(presentation_start == False):
-	with sr.Microphone() as source:
-		print("Waiting to start!")
-		timer_HCR = os.getenv('timer' , 4) #time to listen for in seconds
-		timer_HCR=int(timer_HCR)
-		audio = r.record(source,duration=timer_HCR)
+	# with sr.Microphone(device_index=m) as source:
+	# 	print("Waiting to start!")
+	# 	timer_HCR = os.getenv('timer' , 4) #time to listen for in seconds
+	# 	timer_HCR=int(timer_HCR)
+	# 	audio = r.record(source,duration=timer_HCR)
 
-	msg_json=r.recognize_google(audio,show_all=True) #extract message
-	try:
-		rec=str(msg_json['alternative'][0]['transcript'])
-	except:
-		rec="Nothing said"
+	# msg_json=r.recognize_google(audio,show_all=True) #extract message
+	# try:
+	# 	rec=str(msg_json['alternative'][0]['transcript'])
+	# except:
+	# 	rec="Nothing said"
 
-	print("Google Speech Recognition thinks you said " + rec + "\n") 
+	# print("Google Speech Recognition thinks you said " + rec + "\n") 
 
 		
-	#Check if user has said "Prezence start" (google thinks Prezence is Presents)
-	#starting = re.search('presents? go|presence go', rec, flags=re.I) #flag to ignore any upper or lower-casing the speech recogniser
-	starting = re.search('go', rec, flags=re.I) #flag to ignore any upper or lower-casing the speech recogniser
+	# #Check if user has said "Prezence start" (google thinks Prezence is Presents)
+	# #starting = re.search('presents? go|presence go', rec, flags=re.I) #flag to ignore any upper or lower-casing the speech recogniser
+	# starting = re.search('go', rec, flags=re.I) #flag to ignore any upper or lower-casing the speech recogniser
 
-	if(starting != None):
-		try:
-			startfile = open('output/sync.txt', 'w')
-			timefile = open('output/time.txt', 'w')
-			startfile.write("start")
-			timefile.write(str(long(float(time.time()))))
-			print 'startfile created'
-			startfile.close()
-			timefile.close()
-			presentation_start = True
-		except IOError:
-			print "creating startfile went wrong"
-			sys.exit(1)
+	# if(starting != None):
+	# 	try:
+	# 		startfile = open('output/sync.txt', 'w')
+	# 		timefile = open('output/time.txt', 'w')
+	# 		startfile.write("start")
+	# 		timefile.write(str(long(float(time.time()))))
+	# 		print 'startfile created'
+	# 		startfile.close()
+	# 		timefile.close()
+	# 		presentation_start = True
+	# 	except IOError:
+	# 		print "creating startfile went wrong"
+	# 		sys.exit(1)
+	print("Still waiting")
+	numlines = countlines("output/sync.txt")
+	if(numlines >= 1):
+		presentation_start = True
+		print(numlines)
+	else:
+		time.sleep(1)
+		print(numlines)
 ################END OF START STOP#############################################################################
 
 #############MAIN LOOP########################################################################################
@@ -116,7 +138,7 @@ while(presentation_start is True):
 			sys.exit(1)
 		# obtain audio from the microphone
 		#r = sr.Recognizer()
-		with sr.Microphone() as source:
+		with sr.Microphone(device_index=m) as source:
 			print("Say something!")
 			timer_HCR = os.getenv('timer' , 5) #time to listen for in seconds
 			timer_HCR=int(timer_HCR)
@@ -133,10 +155,10 @@ while(presentation_start is True):
 			rec="NULL"
 			space_split=-1
 			print("confice level is:" + str(number) +" for " + str(rec)+" ," +"number of spaces is: " + str(space_split) )
-			f_speed.write(str(space_split)+ "\n")
-			f_clarity.write(str(number)+ "\n")
+			f_speed.write(str(time.time()) + " " +str(space_split)+ "\n")
+			f_clarity.write(str(time.time()) + " " +str(number)+ "\n")
 			f_content.write("prezence does not understand your speech \n" )
-			f_loud.write('0\n')
+			f_loud.write(str(time.time()) + " 0\n")
 			continue
 
 
@@ -164,77 +186,9 @@ while(presentation_start is True):
 			voice_vol = 0
 		#noisefloor = audioop.minmax(audioasstring, 2)
 		f_loud.write(str(time.time()) + " " + str(voice_vol) + "\n")
-		#print ("how loud without background" + str(voice_vol))
+		print("Volume: " + str(voice_vol))
 	##################################################################################################################
 
-
-
-	#########################CHECK FOR STOP#############################################################################		
-		#Check if user said "Prezence stop"
-		#ending = re.search('presents? end|presence end|presents? and|presence and', rec, flags=re.I)
-		ending = re.search('end|stop', rec, flags=re.I)
-		if(ending != None):
-			try:
-				startfile = open("output/sync.txt", "a")
-				timefile = open("output/time.txt", "a+")
-				startfile.write("\nstop")
-				endtime = long(float(time.time())) #IF stopped, we want to compute how long presentation took
-				print(endtime)
-				starttime = long(timefile.readline()) #get start time that we saved earlier
-				print(starttime)
-				timediff = endtime - starttime
-				print(timediff)
-				timediff_min = long(timediff / 60)
-				print(timediff_min)
-				timediff_sec = timediff % 60
-				print(timediff_sec)
-				timefile.write('\n'+ str(timediff_min) + 'min' + str(timediff_sec) + 'sec')
-				print 'It took ' + str(timediff_min) + 'min' + str(timediff_sec) + 'sec'
-				print 'endfile created'
-				startfile.close()
-				timefile.close()
-
-				presentation_start = False #Exit main loop
-			except IOError:
-				print "creating endfile went wrong"
-				sys.exit(1)
-		# elif(ending != None):
-		# 	try:
-		# 		startfile = open('output/sync.txt','a')
-		# 		startfile.write("\nend")
-		# 		timefile = open('output/time.txt', 'w')
-		# 		endtime = long(float(time.time()))
-		# 		starttime = long(startfile.readline())
-		# 		endfile.write(str(endtime))
-		# 		startfile.close()
-		# 		endfile.close()
-				
-		# 		timediff = endtime - starttime
-		# 		timediff_min = long(timediff / 60)
-		# 		timediff_sec = timediff % 60
-		# 		print 'endfile created'
-		# 		print 'It took ' + str(timediff_min) + 'min' + str(timediff_sec) + 'sec'
-				
-		# 	except IOError:
-		# 		print "creating endfile went wrong"
-		# 		sys.exit(1)
-		#else:
-		#	try:
-		#		os.remove('startrobot.txt')
-		#	except OSError:
-		#		print "startrobot doesn't exist"
-		#	
-		#	try:
-		#		os.remove('endrobot.txt')
-		#	except OSError:
-		#		print "endrobot doesn't exist"
-	################END OF START STOP#############################################################################
-			
-			
-		
-		
-
-		
 		
 		##fast/slow speaking
 		space_split=len(rec.split(" "))
@@ -242,26 +196,63 @@ while(presentation_start is True):
 		f_speed.write(str(time.time()) + " " + str(20*int(space_split))+ "\n")
 		
 		#>150 wpm
-		if(space_split> (2.4*timer_HCR) ):
-			print("you are speaking too fast")
-			#f.write("you are speaking too fast")
+		# if(space_split> (2.4*timer_HCR) ):
+		# 	print("you are speaking too fast")
+		# 	#f.write("you are speaking too fast")
 			
-			#110 to 150 words per minute
-		elif(  (1.83*timer_HCR)  <space_split <= (2.4*timer_HCR)):	
-			print("you are speaking normal")
-			#f.write("you are speaking normal")
-			
-			
-			#100 to 110 wpm
-		elif(  (1.66*timer_HCR)  <space_split<= (1.83*timer_HCR)):	
-			print("you are speaking slow")
-			#f.write("you are speaking slow")
+		# 	#110 to 150 words per minute
+		# elif(  (1.83*timer_HCR)  <space_split <= (2.4*timer_HCR)):	
+		# 	print("you are speaking normal")
+		# 	#f.write("you are speaking normal")
 			
 			
-			#less than 100
-		elif( space_split <= (1.66*timer_HCR)):	
-			print("you are speaking too slow")
-			#f.write("you are speaking too slow")
+		# 	#100 to 110 wpm
+		# elif(  (1.66*timer_HCR)  <space_split<= (1.83*timer_HCR)):	
+		# 	print("you are speaking slow")
+		# 	#f.write("you are speaking slow")
+			
+			
+		# 	#less than 100
+		# elif( space_split <= (1.66*timer_HCR)):	
+		# 	print("you are speaking too slow")
+		# 	#f.write("you are speaking too slow")
+
+		#########################CHECK FOR STOP#############################################################################		
+		#Check if user said "Prezence stop"
+		#ending = re.search('presents? end|presence end|presents? and|presence and', rec, flags=re.I)
+		# ending = re.search('end$|stop$', rec, flags=re.I)
+		# if(ending != None):
+		# 	try:
+		# 		startfile = open("output/sync.txt", "a")
+		# 		timefile = open("output/time.txt", "a+")
+		# 		startfile.write("\nstop")
+		# 		endtime = long(float(time.time())) #IF stopped, we want to compute how long presentation took
+		# 		print(endtime)
+		# 		starttime = long(timefile.readline()) #get start time that we saved earlier
+		# 		print(starttime)
+		# 		timediff = endtime - starttime
+		# 		print(timediff)
+		# 		timediff_min = long(timediff / 60)
+		# 		print(timediff_min)
+		# 		timediff_sec = timediff % 60
+		# 		print(timediff_sec)
+		# 		timefile.write('\n'+ str(timediff_min) + 'min' + str(timediff_sec) + 'sec')
+		# 		print 'It took ' + str(timediff_min) + 'min' + str(timediff_sec) + 'sec'
+		# 		print 'endfile created'
+		# 		startfile.close()
+		# 		timefile.close()
+
+		# 		presentation_start = False #Exit main loop
+		# 	except IOError:
+		# 		print "creating endfile went wrong"
+		# 		sys.exit(1)
+
+		#get number of lines
+		numlines = countlines("output/sync.txt")
+		print("number of lines: " + str(numlines))
+		if (numlines >= 2):
+			presentation_start = False
+	################END OF START STOP#############################################################################
 		
 		
 		
