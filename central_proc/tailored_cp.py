@@ -141,39 +141,40 @@ def givePostFeedback(historicalData, metrics):
     for m, dataList in historicalData.iteritems():
         print m
         print len(dataList)
-        if m == "head_gaze":
-            total = 0
-            for d in dataList:
-                total += ( d > metrics[m]["min"] ) # sum the number of times it is above the min
-            percent = int(round(float(total)/len(dataList) * 100))
-            feedbackList.append("You looked at me " + str(percent) + " percent of the time.\n")
-        elif m == "speed":
-            total = 0
-            for d in dataList:
-                total += d
-            avg = int(round(total/len(dataList)))
-            feedbackList.append("On average, you spoke at " + str(avg) + " words per minute.\n")
-        elif m == "volume":
-            totalLow = 0
-            totalHigh = 0
-            for d in dataList:
-                totalLow += ( d < metrics[m]["min"] )
-                totalHigh += ( d > metrics[m]["max"] )
-            pLow = int(round(float(totalLow)/len(dataList)*100))
-            pHigh = int(round(float(totalHigh)/len(dataList)*100))
-            threshold = 5 # a certain amount of allowance
-            if pLow > threshold and totalLow > totalHigh:
-                feedbackList.append("You spoke too quietly "+str(pLow)+" percent of the time, you can improve!")
-            elif pHigh > threshold and totalHigh > totalLow:
-                feedbackList.append("You spoke too loudly "+str(pHigh)+" percent of the time, you can improve!")
-        elif m == "clarity":
-            total = 0
-            for d in dataList:
-                total += ( d < metrics[m]["min"] )
-            percent = int(round(float(total)/len(dataList) * 100))
-            threshold = 1
-            if percent > threshold:
-                feedbackList.append("I couldn't understand you "+str(percent)+" of the time, be careful!")
+        if len(dataList) < 1:
+            if m == "head_gaze":
+                total = 0
+                for d in dataList:
+                    total += ( d > metrics[m]["min"] ) # sum the number of times it is above the min
+                percent = int(round(float(total)/len(dataList) * 100))
+                feedbackList.append("You looked at me " + str(percent) + " percent of the time.\n")
+            elif m == "speed":
+                total = 0
+                for d in dataList:
+                    total += d
+                avg = int(round(total/len(dataList)))
+                feedbackList.append("On average, you spoke at " + str(avg) + " words per minute.\n")
+            elif m == "volume":
+                totalLow = 0
+                totalHigh = 0
+                for d in dataList:
+                    totalLow += ( d < metrics[m]["min"] )
+                    totalHigh += ( d > metrics[m]["max"] )
+                pLow = int(round(float(totalLow)/len(dataList)*100))
+                pHigh = int(round(float(totalHigh)/len(dataList)*100))
+                threshold = 5 # a certain amount of allowance
+                if pLow > threshold and totalLow > totalHigh:
+                    feedbackList.append("You spoke too quietly "+str(pLow)+" percent of the time, you can improve!")
+                elif pHigh > threshold and totalHigh > totalLow:
+                    feedbackList.append("You spoke too loudly "+str(pHigh)+" percent of the time, you can improve!")
+            elif m == "clarity":
+                total = 0
+                for d in dataList:
+                    total += ( d < metrics[m]["min"] )
+                percent = int(round(float(total)/len(dataList) * 100))
+                threshold = 1
+                if percent > threshold:
+                    feedbackList.append("I couldn't understand you "+str(percent)+" of the time, be careful!")
     overallGoodThreshold = 1
     overallMedThreshold = 2
     overallBadThreshold = 3
@@ -209,7 +210,7 @@ def main():
         # "gestures": []
     }
 
-    maxtime = 60 # in seconds
+    maxtime = 10*60 # in seconds
     try: # do the following unless maxtime is reached:
         with timeout(maxtime, exception=RuntimeError):
             # it calls configure, passing in the metrics structure
