@@ -8,7 +8,7 @@ FEEDBACK_MAP = {
     "head_gaze_low": 1,
     "gestures_high": 2,
     "posture_low": 3,
-    "accuracy_low": 4,
+    "clarity_low": 4,
     "speed_high": 5,
     "volume_high": 7,
     "speed_low": 6,
@@ -17,7 +17,7 @@ FEEDBACK_MAP = {
 # this central processor is tailored to the modules we are expecting.
 # the modules to read:
     # speed
-    # accuracy
+    # clarity
     # volume
     # head gaze
     # gestures
@@ -75,7 +75,7 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
     # this function givesKineticFeedback based on the inputs
     concerningData = {
         "speed": [],
-        "accuracy": [],
+        "clarity": [],
         "volume": [],
         "head_gaze": []
         # "gestures": []
@@ -97,11 +97,11 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
                     f.seek(f.tell())
                     continue
                 data = line.rstrip('\n').split()
-		if len(data) < 2:
-		    print "There was an issue with line: "+line
-		    line = f.readline()
-		    f.seek(f.tell())
-		    continue
+                if len(data) < 2:
+                    print "There was an issue with line: "+line
+                    line = f.readline()
+                    f.seek(f.tell())
+                    continue
                 historicalData[m].append(float(data[1]))
                 print "reading "+m+" "+str(time.time()-float(data[0]))+" seconds after writing"
                 # checks it against thresholds, adds to concerningData if a problem
@@ -153,6 +153,37 @@ def givePostFeedback(historicalData, metrics):
                 total += d
             avg = int(round(total/len(dataList)))
             feedbackList.append("On average, you spoke at " + str(avg) + " words per minute.\n")
+        elif m == "volume":
+            totalLow = 0
+            totalHigh = 0
+            for d in dataList:
+                totalLow += ( d < metrics[m]["min"] )
+                totalHigh += ( d > metrics[m]["max"] )
+            pLow = int(round(float(totalLow)/len(dataList)*100))
+            pHigh = int(round(float(totalHigh)/len(dataList)*100))
+            threshold = 5 # a certain amount of allowance
+            if pLow > threshold and totalLow > totalHigh:
+                feedbackList.append("You spoke too quietly "+str(pLow)+" percent of the time, you can improve!")
+            elif pHigh > threshold and totalHigh > totalLow:
+                feedbackList.append("You spoke too loudly "+str(pHigh)+" percent of the time, you can improve!")
+        elif m == "clarity":
+            total = 0
+            for d in dataList:
+                total += ( d < metrics[m]["min"] )
+            percent = int(round(float(total)/len(dataList) * 100))
+            threshold = 1
+            if percent > threshold:
+                feedbackList.append("I couldn't understand you "+str(percent)+" of the time, be careful!")
+    overallGoodThreshold = 1
+    overallMedThreshold = 2
+    overallBadThreshold = 3
+    numberOfIssues = len(feedbackList)
+    if numberOfIssues < overallGoodThreshold:
+        feedbackList.append("That was really good, keep it up!")
+    elif numberOfIssues < overallMedThreshold:
+        feedbackList.append("Well done, but keep in mind the feedback for next time.")
+    elif numberOfIssues < overallBadThreshold:
+        feedbackList.append("You can do better! Think about my feedback and try again.")
     # and writes these strings to file
     file = open("output/postspeech_feedback.txt", 'w')
     for f in feedbackList:
@@ -165,14 +196,14 @@ def main():
     global start_time
     metrics = {
         "speed": {},
-        "accuracy": {},
+        "clarity": {},
         "volume": {},
         "head_gaze": {}
         # "gestures": {}
     }
     historicalData = {
         "speed": [],
-        "accuracy": [],
+        "clarity": [],
         "volume": [],
         "head_gaze": []
         # "gestures": []

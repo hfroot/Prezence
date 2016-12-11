@@ -11,7 +11,7 @@ sf.write("start\n")
 sf.flush()
 sf.close()
 time.sleep(2)
-for i in range(10):
+for i in range(40):
 	print "data to files"
 	f.write(str(time.time())+" "+str(random.randrange(50,110))+"\n")
 	f.flush()
