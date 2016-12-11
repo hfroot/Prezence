@@ -123,11 +123,28 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
 # function: givePostFeedback
 def givePostFeedback(historicalData, metrics):
     # this function aggregates the historical data
-    for m, dataArray in historicalData.iteritems():
-        print m
-        print dataArray
     # then fills in string templates with the relevant data
+    feedbackList = []
+    for m, dataList in historicalData.iteritems():
+        print m
+        print dataList
+        if m == "head_gaze":
+            total = 0
+            for d in dataList:
+                total += ( d > metrics[m]["min"] ) # sum the number of times it is above the min
+            percent = float(total)/len(dataList) * 100
+            feedbackList.append("You looked at me " + str(percent) + " percent of the time.\n")
+        elif m == "speed":
+            total = 0
+            for d in dataList:
+                total += d
+            avg = total/len(dataList)
+            feedbackList.append("On average, you spoke at " + str(avg) + " words per minute.\n")
     # and writes these strings to file
+    file = open("output/postspeech_feedback.txt", 'w')
+    for f in feedbackList:
+        file.write(f)
+    file.close()
 
 # function: main
 def main():
