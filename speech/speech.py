@@ -66,7 +66,7 @@ presentation_start = False
 while(presentation_start == False):
 	with sr.Microphone() as source:
 		print("Waiting to start!")
-		timer_HCR = os.getenv('timer' , 3) #time to listen for in seconds
+		timer_HCR = os.getenv('timer' , 4) #time to listen for in seconds
 		timer_HCR=int(timer_HCR)
 		audio = r.record(source,duration=timer_HCR)
 
@@ -152,7 +152,7 @@ while(presentation_start is True):
 			
 		print("confice level is:" + str(number) +" for " + rec )
 		
-		f_clarity.write(str(number)+ "\n")
+		f_clarity.write(str(time.time()) + " " + str(number)+ "\n")
 		f_content.write(rec+ "\n")
 			
 		
@@ -163,7 +163,7 @@ while(presentation_start is True):
 		if(voice_vol < 0):
 			voice_vol = 0
 		#noisefloor = audioop.minmax(audioasstring, 2)
-		f_loud.write(str(voice_vol) + "\n")
+		f_loud.write(str(time.time()) + " " + str(voice_vol) + "\n")
 		#print ("how loud without background" + str(voice_vol))
 	##################################################################################################################
 
@@ -177,7 +177,7 @@ while(presentation_start is True):
 			try:
 				startfile = open("output/sync.txt", "a")
 				timefile = open("output/time.txt", "a+")
-				startfile.write("\nend")
+				startfile.write("\nstop")
 				endtime = long(float(time.time())) #IF stopped, we want to compute how long presentation took
 				print(endtime)
 				starttime = long(timefile.readline()) #get start time that we saved earlier
@@ -239,7 +239,7 @@ while(presentation_start is True):
 		##fast/slow speaking
 		space_split=len(rec.split(" "))
 		print("number of words spoken is:" +" " + str(space_split))
-		f_speed.write(str(space_split)+ "\n")
+		f_speed.write(str(time.time()) + " " + str(20*int(space_split))+ "\n")
 		
 		#>150 wpm
 		if(space_split> (2.4*timer_HCR) ):

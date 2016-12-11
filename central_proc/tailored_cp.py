@@ -2,7 +2,7 @@ import os
 import time
 from interruptingcow import timeout
 start_time = 0
-ROBOT_DELAY = 7
+ROBOT_DELAY = 15
 lastFeedback = 0
 FEEDBACK_MAP = {
     "head_gaze_low": 1,
@@ -141,7 +141,7 @@ def givePostFeedback(historicalData, metrics):
     for m, dataList in historicalData.iteritems():
         print m
         print len(dataList)
-        if len(dataList) < 1:
+        if len(dataList) > 1:
             if m == "head_gaze":
                 total = 0
                 for d in dataList:

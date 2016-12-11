@@ -614,7 +614,7 @@ def gesture_3_leaning(motionProxy):
     except BaseException, err:
       print err
 
-def gesture_4_shrugging(motionProxy):
+def gesture_4_shrugging(motionProxy,postureProxy):
     # Choregraphe simplified export in Python.
     names = list()
     times = list()
@@ -728,6 +728,9 @@ def gesture_4_shrugging(motionProxy):
       motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
+
+    postureProxy.goToPosture("StandInit", 1.0)
+
 
 def gesture_5_arms(motionProxy):
 
@@ -1880,14 +1883,17 @@ def main(robotIP,robotPort):
     # gangnam_style(postureProxy,audioProxy,motionProxy)
 
     # say the text with the local configuration
-    animatedSpeechProxy.say("Guess who's back, back again", gesture_confused)
+    animatedSpeechProxy.say("Please wait while I get ready, you can chill out now", gesture_confused)
 
     #StandUp
     StandUp(postureProxy)
     # motionProxy.rest()
 
     #==================Check for Presentation to Begin===========================
-    time.sleep(5)
+    time.sleep(8)
+
+    animatedSpeechProxy.say("Please say go when you are ready and raise your arms in a right angled manner", gesture_confused)
+
     start = False
     syncFile = open('output/sync.txt', 'r')
     while not start:
@@ -1910,7 +1916,7 @@ def main(robotIP,robotPort):
     #Reads kineticFeedback File
     stop = False
     kinetic_feedbackfile = open('output/kinetic_feedback.txt', 'r')
-
+    timeSinceLastNod = 0
     while not stop:
         where = kinetic_feedbackfile.tell()
         line = kinetic_feedbackfile.readline()
@@ -1921,7 +1927,9 @@ def main(robotIP,robotPort):
             print "No new line detected in Kinetic Feedback"
             time.sleep(1)
             kinetic_feedbackfile.seek(where)
-            gesture_9_nod(motionProxy) #Goes to listening state
+            if time.time() - timeSinceLastNod > 15:
+                gesture_9_nod(motionProxy) #Goes to listening state
+                timeSinceLastNod = time.time()
         else:
             #if kinetic feedback output file changes
             print "perform function"
@@ -1930,54 +1938,62 @@ def main(robotIP,robotPort):
                 char  = int(line.rstrip('\n'))
                 if char == 1:
                     gesture_1_handwave(motionProxy)
-                    print "handwave gesture"
+                    print "handwave gesture, head_gaze_low"
 
                 elif char == 2:
                     gesture_2_attention(motionProxy)
-                    print "attention"
+                    print "attention, gestures_high"
 
                 elif char == 3:
                     gesture_3_leaning(motionProxy)
-                    print "leaning"
+                    print "leaning,posture_low"
 
                 elif char == 4:
-                    gesture_4_shrugging(motionProxy)
-                    print "shrugging"
+                    gesture_4_shrugging(motionProxy,postureProxy)
+                    print "shrugging,clarity_low"
 
                 elif char ==5:
                     gesture_5_arms(motionProxy)
-                    print "raise up and down"
+                    print "raise up and down, speed_high"
 
                 elif char ==6:
                     gesture_6_bored(motionProxy)
-                    print "Bored"                    
+                    print "Bored, Speed Too Slow"                    
 
                 elif char ==7:
                     gesture_7_coverears(motionProxy)
-                    print "Cover ears"                    
+                    print "Cover ears, volume_high"                    
 
                 elif char ==8:
                     gesture_8_tilt_head(motionProxy)
-                    print "tilt head"                    
+                    print "tilt head, volume_low"                    
 
                 else:
                     gesture_9_nod(motionProxy)
                     print "Nodding Head and standing chill" 
 
-        if not syncline or syncline in ['\n','\n']:
-            print "No new line detected in Sync File"
-            time.sleep(1)
-            syncFile.seek(syncwhere)
-        else:
-            if syncline.rstrip('\n') == "stop":
-                print "New line detected in sync file"
+        # if not syncline or syncline in ['\n','\n']:
+        #     print "No new line detected in Sync File"
+        #     time.sleep(1)
+        #     syncFile.seek(syncwhere)
+        # else:
+        #     if syncline.rstrip('\n') == "stop":
+        #         print "New line detected in sync file"
+        #         stop = True
+
+        # check if sync has said to stop
+        syncFileStop = open("output/sync.txt", 'r')
+        for sline in syncFileStop:
+            if sline.rstrip('\n') == "stop":
                 stop = True
+                print "User called for stop"
+        syncFileStop.close()
             
 
-    animatedSpeechProxy.say("End Presentation - Well Done!", gesture_confused)
+    animatedSpeechProxy.say("Well Done!", gesture_confused)
     print "End Presentation"
 
-    animatedSpeechProxy.say("Begin Post Speech Feedback", gesture_confused)
+    # animatedSpeechProxy.say("Begin Post Speech Feedback", gesture_confused)
     print "Begin Post-Speech Feedback"
 
     postspeech_feedbackfile = open('output/postspeech_feedback.txt', 'r')    
@@ -1986,7 +2002,7 @@ def main(robotIP,robotPort):
 
     animatedSpeechProxy.say(data, gesture_confused)
 
-    animatedSpeechProxy.say("End Post Speech Feedback", gesture_confused)
+    # animatedSpeechProxy.say("End Post Speech Feedback", gesture_confused)
     print "End Post-Speech Feedback, Terminating Robot"
 
 
