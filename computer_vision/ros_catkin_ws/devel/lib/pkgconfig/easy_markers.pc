@@ -1,8 +1,0 @@
-prefix=/home/human/ros_catkin_ws/devel
-
-Name: easy_markers
-Description: Description of easy_markers
-Version: 0.2.4
-Cflags: 
-Libs: -L/home/human/ros_catkin_ws/devel/lib 
-Requires: geometry_msgs visualization_msgs

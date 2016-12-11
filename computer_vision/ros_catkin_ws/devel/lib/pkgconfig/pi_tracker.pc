@@ -1,8 +1,0 @@
-prefix=/home/human/ros_catkin_ws/devel
-
-Name: pi_tracker
-Description: Description of pi_tracker
-Version: 0.4.0
-Cflags: -I/home/human/ros_catkin_ws/devel/include
-Libs: -L/home/human/ros_catkin_ws/devel/lib 
-Requires: message_runtime rospy roscpp

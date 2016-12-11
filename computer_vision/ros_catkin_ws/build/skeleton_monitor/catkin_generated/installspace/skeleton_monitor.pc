@@ -1,8 +1,0 @@
-prefix=/home/human/ros_catkin_ws/install
-
-Name: skeleton_monitor
-Description: Description of skeleton_monitor
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/human/ros_catkin_ws/install/lib 
-Requires: skeleton_markers roscpp rospy

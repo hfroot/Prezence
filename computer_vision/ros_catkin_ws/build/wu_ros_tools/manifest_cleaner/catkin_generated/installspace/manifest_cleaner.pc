@@ -1,8 +1,0 @@
-prefix=/home/human/ros_catkin_ws/install
-
-Name: manifest_cleaner
-Description: Description of manifest_cleaner
-Version: 0.2.4
-Cflags: 
-Libs: -L/home/human/ros_catkin_ws/install/lib 
-Requires: 

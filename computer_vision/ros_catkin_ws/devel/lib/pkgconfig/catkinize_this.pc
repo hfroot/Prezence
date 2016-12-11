@@ -1,8 +1,0 @@
-prefix=/home/human/ros_catkin_ws/devel
-
-Name: catkinize_this
-Description: Description of catkinize_this
-Version: 0.2.4
-Cflags: 
-Libs: -L/home/human/ros_catkin_ws/devel/lib 
-Requires: 

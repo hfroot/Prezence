@@ -1,8 +1,0 @@
-prefix=/home/human/ros_catkin_ws/devel
-
-Name: head_pose_estimation
-Description: Description of head_pose_estimation
-Version: 0.0.1
-Cflags: 
-Libs: -L/home/human/ros_catkin_ws/devel/lib 
-Requires: 

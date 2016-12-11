@@ -1,8 +1,0 @@
-prefix=/home/human/ros_catkin_ws/install
-
-Name: people_msgs
-Description: Description of people_msgs
-Version: 1.0.10
-Cflags: -I/home/human/ros_catkin_ws/install/include
-Libs: -L/home/human/ros_catkin_ws/install/lib 
-Requires: message_runtime geometry_msgs std_msgs

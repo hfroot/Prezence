@@ -1,8 +1,0 @@
-prefix=/home/human/ros_catkin_ws/devel
-
-Name: head_pose_estimation2
-Description: Description of head_pose_estimation2
-Version: 1.0.3
-Cflags: -I/home/human/ros_catkin_ws/src/ros-head-tracking/include
-Libs: -L/home/human/ros_catkin_ws/devel/lib 
-Requires: roscpp rospy geometry_msgs tf sensor_msgs cv_bridge pcl_ros image_transport angles message_filters dynamic_reconfigure people_msgs face_detector
