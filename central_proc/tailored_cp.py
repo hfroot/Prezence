@@ -1,13 +1,13 @@
 import os
 import time
 from interruptingcow import timeout
-start_time = 0
+startTime = 0
 ROBOT_DELAY = 15
 lastFeedback = 0
 FEEDBACK_MAP = {
     "head_gaze_low": 1,
-    "gestures_high": 2,
-    "posture_low": 3,
+    "covering_mouth": 2,
+    # "posture_low": 3,
     "clarity_low": 4,
     "speed_high": 5,
     "volume_high": 7,
@@ -29,12 +29,21 @@ def configure(metrics):
     configFile = open(os.path.dirname(os.path.realpath(__file__))+'/config.txt', 'r', os.O_NONBLOCK)
     for line in configFile:
         configData = line.rstrip('\n').split()
-        m = configData[0]
-        metrics[m]["file"] = open(outputDir+m+".txt", 'r', os.O_NONBLOCK)
-        i = 1
+        filename = ""
+        if configData[0] == "gesture":
+            m = configData[1]
+            filename = outputDir+"gesture.txt"
+            # metrics[m] = { "file": open(outputDir+"gesture.txt", 'r', os.O_NONBLOCK) }
+            i = 2
+        else:
+            m = configData[0]
+            filename = outputDir+m+".txt"
+            # metrics[m] = { "file": open(outputDir+m+".txt", 'r', os.O_NONBLOCK) }
+            i = 1
+        metrics[m] = { "file": open(filename, 'r', os.O_NONBLOCK) }
         while i < len(configData):
             metrics[m][configData[i]] = float(configData[i+1])
-            # print m+" "+configData[i]+" "+configData[i+1]
+            print m+" "+configData[i]+" "+configData[i+1]
             i += 2
     configFile.close()
 
@@ -71,15 +80,12 @@ def makeFeedbackDecision(metrics, concerningData, feedbackFile):
 
 # function: giveKineticFeedback
 def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
-    global start_time
+    global startTime
     # this function givesKineticFeedback based on the inputs
-    concerningData = {
-        "speed": [],
-        "clarity": [],
-        "volume": [],
-        "head_gaze": []
-        # "gestures": []
-    }
+    concerningData = {}
+    for m in metrics:
+        concerningData[m] = []
+        historicalData[m] = []
     stop = False
     # while not told to stop:
     while not stop:
@@ -102,10 +108,15 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
                     line = f.readline()
                     f.seek(f.tell())
                     continue
-                historicalData[m].append(float(data[1]))
+                value = 0
+                if m == "clarity" or m == "speed" or m == "volume" or m == "head_gaze":
+                    value = float(data[1])
+                else:
+                    value = 1
+                historicalData[m].append(value)
                 print "reading "+m+" "+str(time.time()-float(data[0]))+" seconds after writing"
                 # checks it against thresholds, adds to concerningData if a problem
-                maybeAppend = {"timestamp": float(data[0]), "data": float(data[1])}
+                maybeAppend = {"timestamp": float(data[0]), "data": value}
                 if "min" in metrics[m]:
                     if float(data[1]) < metrics[m]['min']:
                         concern = True
@@ -133,11 +144,34 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
                 stop = True
                 print "User called for stop"
         syncFileStop.close()
+
+def generateGestureFeedback(m, dataList, feedbackList, gestureCount):
+    feedback = ""
+    total = 0
+    for d in dataList:
+        total += d
+    percent = int(round(float(total)/gestureCount * 100))
+    action = m.split('_')
+    if m == "folding_arms" or m == "covering_mouth":
+        feedback = "You were "+action[0]+" your "+action[1]+" "+str(percent)+" percent of the time.\n"
+    elif m == "poor_posture":
+        feedback = "You had "+action[0]+" "+action[1]+" "+str(percent)+" percent of the time.\n"
+    elif m == "turning_away" or m == "looking_down":
+        feedback = "You were "+action[0]+" "+action[1]+" "+str(percent)+" percent of the time.\n"
+    threshold = 10
+    if percent > threshold:
+        feedbackList.append(feedback)
+
 # function: givePostFeedback
-def givePostFeedback(historicalData, metrics):
+def givePostFeedback(historicalData, metrics, timeTaken):
     # this function aggregates the historical data
     # then fills in string templates with the relevant data
     feedbackList = []
+    feedbackList.append("Your speech was "+str(int(round(timeTaken/60)))+" minutes and "+str(int(round(timeTaken%60)))+" seconds long.\n")
+    gestureCount = 0
+    for m, dataList in historicalData.iteritems():
+        if not (m=="head_gaze" or m=="speed" or m=="volume" or m=="clarity"):
+            gestureCount += len(dataList)
     for m, dataList in historicalData.iteritems():
         print m
         print len(dataList)
@@ -164,27 +198,27 @@ def givePostFeedback(historicalData, metrics):
                 pHigh = int(round(float(totalHigh)/len(dataList)*100))
                 threshold = 5 # a certain amount of allowance
                 if pLow > threshold and totalLow > totalHigh:
-                    feedbackList.append("You spoke too quietly "+str(pLow)+" percent of the time, you can improve!")
+                    feedbackList.append("You spoke too quietly "+str(pLow)+" percent of the time, you can improve!\n")
                 elif pHigh > threshold and totalHigh > totalLow:
-                    feedbackList.append("You spoke too loudly "+str(pHigh)+" percent of the time, you can improve!")
+                    feedbackList.append("You spoke too loudly "+str(pHigh)+" percent of the time, you can improve!\n")
             elif m == "clarity":
                 total = 0
                 for d in dataList:
-                    total += ( d < metrics[m]["min"] )
+                    total += ( d < metrics[m]["min"] ) # sum the number of times it is below the min
                 percent = int(round(float(total)/len(dataList) * 100))
-                threshold = 1
-                if percent > threshold:
-                    feedbackList.append("I couldn't understand you "+str(percent)+" of the time, be careful!")
-    overallGoodThreshold = 1
-    overallMedThreshold = 2
-    overallBadThreshold = 3
+                feedbackList.append("I couldn't understand you " + str(percent) + " percent of the time.\n")
+            else:
+                generateGestureFeedback(m, dataList, feedbackList, gestureCount)
+            
+    overallGoodThreshold = 2
+    overallMedThreshold = 4
     numberOfIssues = len(feedbackList)
     if numberOfIssues < overallGoodThreshold:
-        feedbackList.append("That was really good, keep it up!")
+        feedbackList.append("That was really good, keep it up!\n")
     elif numberOfIssues < overallMedThreshold:
-        feedbackList.append("Well done, but keep in mind the feedback for next time.")
-    elif numberOfIssues < overallBadThreshold:
-        feedbackList.append("You can do better! Think about my feedback and try again.")
+        feedbackList.append("Well done, but keep in mind the feedback for next time.\n")
+    else:
+        feedbackList.append("You can do better! Think about my feedback and try again.\n")
     # and writes these strings to file
     file = open("output/postspeech_feedback.txt", 'w')
     for f in feedbackList:
@@ -194,23 +228,11 @@ def givePostFeedback(historicalData, metrics):
 # function: main
 def main():
     # this function is the main control
-    global start_time
-    metrics = {
-        "speed": {},
-        "clarity": {},
-        "volume": {},
-        "head_gaze": {}
-        # "gestures": {}
-    }
-    historicalData = {
-        "speed": [],
-        "clarity": [],
-        "volume": [],
-        "head_gaze": []
-        # "gestures": []
-    }
+    global startTime
+    metrics = {}
+    historicalData = {}
 
-    maxtime = 10*60 # in seconds
+    maxtime = 30 # in seconds
     try: # do the following unless maxtime is reached:
         with timeout(maxtime, exception=RuntimeError):
             # it calls configure, passing in the metrics structure
@@ -229,14 +251,14 @@ def main():
                     if line.rstrip('\n') == "start":
                         start = True
             print "starting"
-            start_time = time.time()
+            startTime = time.time()
             giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile)
     except RuntimeError:
         print "Stopping: run time exceeded "+str(maxtime)+" seconds"
         pass
-
+    endTime = time.time()
     syncFile.close()
     feedbackFile.close()
-    givePostFeedback(historicalData, metrics)
+    givePostFeedback(historicalData, metrics, endTime-startTime)
 
 main()
