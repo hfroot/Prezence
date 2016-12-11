@@ -97,6 +97,11 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
                     f.seek(f.tell())
                     continue
                 data = line.rstrip('\n').split()
+		if len(data) < 2:
+		    print "There was an issue with line: "+line
+		    line = f.readline()
+		    f.seek(f.tell())
+		    continue
                 historicalData[m].append(float(data[1]))
                 print "reading "+m+" "+str(time.time()-float(data[0]))+" seconds after writing"
                 # checks it against thresholds, adds to concerningData if a problem
