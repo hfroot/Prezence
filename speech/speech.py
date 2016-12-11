@@ -12,31 +12,32 @@ import audioop
 import re #to do regex
 import time #to do timer
 
+#REMEMBER TO RUN IN SPEECH FOLDER BECAUSE OF THE WAY FILES ARE ADDRESSED AND CREATED
 
 try:
-	os.remove("C:\Python27\output\speed.txt")
-	os.remove("C:\Python27\output\clarity.txt")
-	os.remove("C:\Python27\output\content_sp.txt")
+	os.remove("../output/speed.txt")
+	os.remove("../output/clarity.txt")
+	os.remove("../output/content_sp.txt")
 except:
 	print("file does not exist")
 	
 
-try:
-	f_speed = open("C:\Python27\output\speed.txt" , "a")
-	f_clarity = open("C:\Python27\output\clarity.txt" , "a")
-	f_content = open("C:\Python27\output\content_sp.txt" , "a")	
-except IOError:
-	print "Could not open file"
-	sys.exit(1)
+# try:
+# 	f_speed = open("C:\Python27\output\speed.txt" , "a")
+# 	f_clarity = open("C:\Python27\output\clarity.txt" , "a")
+# 	f_content = open("C:\Python27\output\content_sp.txt" , "a")	
+# except IOError:
+# 	print "Could not open file"
+# 	sys.exit(1)
 
 
 while(True):
 
 	# obtain audio from the microphone
 	r = sr.Recognizer()
-	with sr.Microphone() as source:
+	with sr.Microphone(device_index=4) as source:
 		print("Say something!")
-		timer_HCR = os.getenv('timer' , 3) #time to listen for in seconds
+		timer_HCR = os.getenv('timer' , 5) #time to listen for in seconds
 		timer_HCR=int(timer_HCR)
 		audio = r.record(source,duration=timer_HCR)
 		
@@ -46,6 +47,14 @@ while(True):
 
 	# recognize speech using Google Speech Recognition
 	try:
+		try:
+			f_speed = open("../output/speed.txt" , "a")
+			f_clarity = open("../output/clarity.txt" , "a")
+			f_content = open("../output/content_sp.txt" , "a")	
+		except IOError:
+			print "Could not open file"
+			sys.exit(1)
+
 		# for testing purposes, we're just using the default API key
 		# to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
 		# instead of `r.recognize_google(audio)`
@@ -63,6 +72,8 @@ while(True):
 		except:
 			rec=str((msg_json['alternative'][0]['transcript']))
 			number="0"
+
+
 
 			
 		print("confice level is:" + str(number) +" for " + rec )
@@ -87,8 +98,9 @@ while(True):
 		ending = re.search('presents? stop|presence stop', rec, flags=re.I)
 		if(starting != None):
 			try:
-				startfile = open('startrobot.txt', 'w')
-				startfile.write(str(long(float(time.time()))))
+				startfile = open('../output/sync.txt', 'w')
+				startfile.write("start")
+				# startfile.write(str(long(float(time.time()))))
 				print 'startfile created'
 				startfile.close()
 			except IOError:
@@ -96,7 +108,8 @@ while(True):
 				sys.exit(1)
 		elif(ending != None):
 			try:
-				startfile = open('startrobot.txt','r')
+				startfile = open('../output/sync.txt','a')
+				startfile.write("\nend")
 				endfile = open('endrobot.txt', 'w')
 				endtime = long(float(time.time()))
 				starttime = long(startfile.readline())
@@ -175,9 +188,9 @@ while(True):
 	except sr.RequestError as e:
 		print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
-f_speed.close()
-f_clarity.close()
-f_content.close()
+	f_speed.close()
+	f_clarity.close()
+	f_content.close()
 
 # recognize speech using Microsoft Bing Voice Recognition
 #BING_KEY = "28cfcf7a63c441b0815c4295157b9c7f" # Microsoft Bing Voice Recognition API keys 32-character lowercase hexadecimal strings
