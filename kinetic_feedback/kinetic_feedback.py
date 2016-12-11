@@ -6,6 +6,7 @@ import sys
 from naoqi import ALProxy
 import time
 
+
 def StiffnessOn(proxy):
     # We use the "Body" name to signify the collection of all joints
     pNames = "Body"
@@ -1541,9 +1542,8 @@ def gesture_confused(motionProxy):
     except BaseException, err:
       print err
 
-def gangnam_style(motionProxy,audioProxy):
-    motionProxy.goToPosture("StandInit", 1.0)
-
+def gangnam_style(postureProxy,audioProxy,motionProxy):
+    postureProxy.goToPosture("StandInit", 1.0)
     # Choregraphe simplified export in Python.
     names = list()
     times = list()
@@ -1653,16 +1653,12 @@ def gangnam_style(motionProxy,audioProxy):
     times.append([0.96, 1.32, 1.64, 1.88, 2.12, 2.36, 2.6, 2.84, 3.08, 3.32, 3.56, 3.8, 4.04, 4.28, 4.76, 5, 5.24, 5.48, 5.72, 5.96, 6.2, 6.44, 6.68, 6.92, 7.16, 7.4, 7.64, 7.88, 8.36, 8.6, 8.84, 9.08, 9.32, 9.56, 9.8, 10.04, 10.28, 10.52, 10.76, 11, 11.24, 11.48, 11.72, 11.96, 12.2, 13, 13.24, 13.48, 13.72, 13.96, 14.2, 14.44, 14.68, 14.92, 15.16, 15.4, 15.64, 15.88, 16.24, 16.64])
     keys.append([0.115008, 0.115008, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, 1.50029, 1.7794])
 
-    try:
-        motionProxy.angleInterpolation(names, keys, times, True)
-        audioProxy.playFile("gangnamstyle.wav", 0.5,0.5)
-
-    except BaseException, err:
-      print err
+    
+    motionProxy.angleInterpolation(names, keys, times, True)
+    audioProxy.playFile("/home/daryl/HCR/Prezence/kinetic_feedback/gangnamstyle.wav",0.5,0.5)
 
 
-
-    motionProxy.goToPosture("StandInit", 1.0)
+    postureProxy.goToPosture("StandInit", 1.0)
 
 def squat(motionProxy):
 
@@ -1873,13 +1869,15 @@ def main(robotIP,robotPort):
         print "Error was: ", e
 
     try:
-        audioProxy = ALProxy("ALAudioPlayer", IP, PORT)
+        audioProxy = ALProxy("ALAudioPlayer", robotIP, robotPort)
     except Exception,e:
         print "Could not create proxy to ALAudioPlayer"
         print "Error was: ",e
 
     # Turn on the Motors
     motionProxy.wakeUp()
+
+    # gangnam_style(postureProxy,audioProxy,motionProxy)
 
     # say the text with the local configuration
     animatedSpeechProxy.say("Guess who's back, back again", gesture_confused)
@@ -2006,10 +2004,10 @@ def main(robotIP,robotPort):
 
 
 if __name__ == "__main__":
-    robotIp = "169.254.62.202" #Set a default IP here
+    robotIp = "169.254.44.123" #Set a default IP here
     # robotIp = "127.0.0.1" #Set a default IP here
     robotPort = 9559 #Set default POort here
-
+    # robotPort = 40995 #Set default POort here
 
     # if len(sys.argv) < 2:
     #     print "Usage python robotIP please"
