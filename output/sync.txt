@@ -1,2 +1,6 @@
 start
+<<<<<<< HEAD
 stop
+=======
+end
+>>>>>>> 8583cb7fa5cef1c7621f4c1082c68129a809a58a
