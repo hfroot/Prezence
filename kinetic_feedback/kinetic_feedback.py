@@ -1541,7 +1541,6 @@ def gesture_confused(motionProxy):
     except BaseException, err:
       print err
 
-
 def gangnam_style(motionProxy,audioProxy):
     motionProxy.goToPosture("StandInit", 1.0)
 
@@ -1655,8 +1654,8 @@ def gangnam_style(motionProxy,audioProxy):
     keys.append([0.115008, 0.115008, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, 1.50029, 1.7794])
 
     try:
-      motionProxy.angleInterpolation(names, keys, times, True)\
-    audioProxy.playFile("gangnamstyle.wav")
+        motionProxy.angleInterpolation(names, keys, times, True)
+        audioProxy.playFile("gangnamstyle.wav", 0.5,0.5)
 
     except BaseException, err:
       print err
@@ -1867,7 +1866,6 @@ def main(robotIP,robotPort):
         print "Could not create proxy to ALRobotPosture"
         print "Error was: ", e
 
-
     try:
         animatedSpeechProxy = ALProxy("ALAnimatedSpeech", robotIP, robotPort)    
     except Exception, e:
@@ -1875,7 +1873,7 @@ def main(robotIP,robotPort):
         print "Error was: ", e
 
     try:
-    audioProxy = ALProxy("ALAudioPlayer", IP, PORT)
+        audioProxy = ALProxy("ALAudioPlayer", IP, PORT)
     except Exception,e:
         print "Could not create proxy to ALAudioPlayer"
         print "Error was: ",e

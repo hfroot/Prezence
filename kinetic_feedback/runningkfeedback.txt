@@ -2,3 +2,8 @@ pynaoqi-python2.7-2.1.4.13-linux64
 
 
 export PYTHONPATH=$PYTHONPATH:/home/human/HCR/Prezence/kinetic_feedback/pynaoqi-python2.7-2.1.2.17-linux64
+
+
+export PYTHONPATH=$PYTHONPATH:/home/daryl/HCR/Prezence/kinetic_feedback/pynaoqi-python2.7-2.1.2.17-linux64
+
+169 254 44 123
