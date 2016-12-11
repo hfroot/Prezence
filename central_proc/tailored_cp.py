@@ -8,7 +8,7 @@ FEEDBACK_MAP = {
     "head_gaze_low": 1,
     "gestures_high": 2,
     "posture_low": 3,
-    "accuracy_low": 4,
+    "clarity_low": 4,
     "speed_high": 5,
     "volume_high": 7,
     "speed_low": 6,
@@ -17,7 +17,7 @@ FEEDBACK_MAP = {
 # this central processor is tailored to the modules we are expecting.
 # the modules to read:
     # speed
-    # accuracy
+    # clarity
     # volume
     # head gaze
     # gestures
@@ -75,7 +75,7 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
     # this function givesKineticFeedback based on the inputs
     concerningData = {
         "speed": [],
-        "accuracy": [],
+        "clarity": [],
         "volume": [],
         "head_gaze": []
         # "gestures": []
@@ -166,7 +166,7 @@ def givePostFeedback(historicalData, metrics):
                 feedbackList.append("You spoke too quietly "+str(pLow)+" percent of the time, you can improve!")
             elif pHigh > threshold and totalHigh > totalLow:
                 feedbackList.append("You spoke too loudly "+str(pHigh)+" percent of the time, you can improve!")
-        elif m == "accuracy":
+        elif m == "clarity":
             total = 0
             for d in dataList:
                 total += ( d < metrics[m]["min"] )
@@ -196,14 +196,14 @@ def main():
     global start_time
     metrics = {
         "speed": {},
-        "accuracy": {},
+        "clarity": {},
         "volume": {},
         "head_gaze": {}
         # "gestures": {}
     }
     historicalData = {
         "speed": [],
-        "accuracy": [],
+        "clarity": [],
         "volume": [],
         "head_gaze": []
         # "gestures": []
