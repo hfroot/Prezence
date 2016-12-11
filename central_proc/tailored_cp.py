@@ -95,6 +95,9 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
             else:
                 # saves this data for historical record
                 data = line.rstrip('\n').split()
+                if len(data) < 2:
+                    print "There was an issue reading "+m+" the previous data point will be invalid"
+                    continue
                 historicalData[m].append(float(data[1]))
                 print "reading "+m+" "+str(time.time()-float(data[0]))+" seconds after writing"
                 # checks it against thresholds, adds to concerningData if a problem
@@ -118,15 +121,12 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
             else:
                 print "Robot probably not ready"
         # check if sync has said to stop
-        swhere = syncFile.tell()
-        sline = syncFile.readline()
-        if not line or line in ['\n', '\r\n']:
-            time.sleep(1)
-            syncFile.seek(where)
-        else:
-            if line.rstrip('\n') == "stop":
+        syncFileStop = open("output/sync.txt", 'r')
+        for sline in syncFileStop:
+            if sline.rstrip('\n') == "stop":
                 stop = True
-
+                print "User called for stop"
+        syncFileStop.close()
 # function: givePostFeedback
 def givePostFeedback(historicalData, metrics):
     # this function aggregates the historical data
@@ -134,18 +134,18 @@ def givePostFeedback(historicalData, metrics):
     feedbackList = []
     for m, dataList in historicalData.iteritems():
         print m
-        print dataList
+        print len(dataList)
         if m == "head_gaze":
             total = 0
             for d in dataList:
                 total += ( d > metrics[m]["min"] ) # sum the number of times it is above the min
-            percent = float(total)/len(dataList) * 100
+            percent = int(round(float(total)/len(dataList) * 100))
             feedbackList.append("You looked at me " + str(percent) + " percent of the time.\n")
         elif m == "speed":
             total = 0
             for d in dataList:
                 total += d
-            avg = total/len(dataList)
+            avg = int(round(total/len(dataList)))
             feedbackList.append("On average, you spoke at " + str(avg) + " words per minute.\n")
     # and writes these strings to file
     file = open("output/postspeech_feedback.txt", 'w')
@@ -172,7 +172,7 @@ def main():
         # "gestures": []
     }
 
-    maxtime = 15 # in seconds
+    maxtime = 60 # in seconds
     try: # do the following unless maxtime is reached:
         with timeout(maxtime, exception=RuntimeError):
             # it calls configure, passing in the metrics structure
