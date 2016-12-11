@@ -1,19 +1,5 @@
-#!/bin/bash
-
-# python central_proc.py 
-
-# gnome-terminal
-
-# gnome-terminal -e python | speech/speech.py
-
-x-terminal-emulator -e python speech/speech.py
-
-# roslaunch skeleton_markers skeleton_launch
-# rosrun skeletom_monitor skeleton_monitor
-
-
-# gnome-terminal
-# python speech/speech.py
-
-# gnome-terminal
-# python kinetic_feedback/kinetic_feedback.py
+#!/bin/sh
+xterm -title "Central Proc" -hold -e python central_proc/tailored_cp.py  &
+xterm -title "Speech Module" -hold -e python speech/speech.py  &
+xterm -title "Computer Vision" -hold -e roslaunch skeleton_markers skeleton_launch | rosrun skeletom_monitor skeleton_monitor  &
+xterm -title "Gesture" -hold -e python kinetic_feedback/kinetic_feedback.py
