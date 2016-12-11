@@ -1848,7 +1848,7 @@ def main(robotIP,robotPort):
     animatedSpeechProxy.say("End Presentation - Well Done!", gesture_confused)
     print "End Presentation"
 
-
+    animatedSpeechProxy.say("Begin Post Speech Feedback", gesture_confused)
     print "Begin Post-Speech Feedback"
 
     postspeech_feedbackfile = open('output/postspeech_feedback.txt', 'r')    
@@ -1857,13 +1857,14 @@ def main(robotIP,robotPort):
 
     animatedSpeechProxy.say(data, gesture_confused)
 
+    animatedSpeechProxy.say("End Post Speech Feedback", gesture_confused)
     print "End Post-Speech Feedback, Terminating Robot"
 
 
     # gesture_confused(robotIP)
     # StandUp(postureProxy)
 
-    ttsProxy.say("Shut up weicong")
+    # ttsProxy.say("Shut up weicong")
 
     # StandUp(postureProxy)
 
