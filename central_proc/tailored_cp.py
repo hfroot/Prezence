@@ -2,7 +2,7 @@ import os
 import time
 from interruptingcow import timeout
 startTime = 0
-ROBOT_DELAY = 15
+ROBOT_DELAY = 10
 lastFeedback = 0
 TIME_DELAY_MAX = 1
 FEEDBACK_MAP = {
@@ -75,6 +75,7 @@ def makeFeedbackDecision(metrics, concerningData, feedbackFile):
             # it compares the data to the allowance and priority given in config
             # and finds the item that is the greatest outside the allowance and has the highest priority and flags this
             # print m+" "+str(len(info))+" "+str(metrics[m]['priority'])
+        print coveringMouthTotal
         problemMetric = ""
         if m == "gesture":
             if len(info) > 0:
@@ -136,6 +137,8 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
                     continue
                 value = 0
                 metric = ""
+                timeDelay = time.time()-float(data[0])
+                print "reading "+m+" "+str(timeDelay)+" seconds after writing"
                 if not isGesture(m):
                     value = float(data[1])
                     metric = m
@@ -162,8 +165,8 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
                         concerningData[metric].append(maybeAppend)
                 historicalData[metric].append(value)
                 timeDelay = time.time()-float(data[0])
-                if timeDelay > TIME_DELAY_MAX:
-                    print "reading "+m+" "+str(timeDelay)+" seconds after writing"
+                # if timeDelay > TIME_DELAY_MAX:
+                #     print "reading "+m+" "+str(timeDelay)+" seconds after writing"
 
                 line = f.readline()
                 f.seek(f.tell())
@@ -198,7 +201,7 @@ def generateGestureFeedback(m, dataList, feedbackList, gestureCount):
                 feedback = "You were "+action[0]+" your "+action[1]+" "+str(percent)+" percent of the time.\n"
             elif d == "poor_posture":
                 feedback = "You had "+action[0]+" "+action[1]+" "+str(percent)+" percent of the time.\n"
-            elif d == "turning_away" or d == "looking_down":
+            elif d == "turning_away":
                 feedback = "You were "+action[0]+" "+action[1]+" "+str(percent)+" percent of the time.\n"
             threshold = 10
             if percent > threshold:
@@ -213,7 +216,7 @@ def givePostFeedback(historicalData, metrics, timeTaken):
     feedbackList.append("Your speech was "+str(int(round(timeTaken/60)))+" minutes and "+str(int(round(timeTaken%60)))+" seconds long.\n")
     gestureCount = 0
     for m, dataList in historicalData.iteritems():
-        if not (m=="head_gaze" or m=="speed" or m=="volume" or m=="clarity"):
+        if isGesture(m):
             gestureCount += len(dataList)
     for m, dataList in historicalData.iteritems():
         print m
@@ -221,6 +224,7 @@ def givePostFeedback(historicalData, metrics, timeTaken):
         # print dataList
         if len(dataList) > 0:
             if m == "head_gaze":
+                print "head gaze feedback"
                 total = 0
                 for d in dataList:
                     total += ( d < metrics[m]["min"] ) # sum the number of times it is above the min
@@ -242,15 +246,15 @@ def givePostFeedback(historicalData, metrics, timeTaken):
                 pHigh = int(round(float(totalHigh)/len(dataList)*100))
                 threshold = 5 # a certain amount of allowance
                 if pLow > threshold and totalLow > totalHigh:
-                    feedbackList.append("You spoke too quietly "+str(pLow)+" percent of the time, you can improve!\n")
+                    feedbackList.append("You spoke too quietly "+str(pLow)+" percent of the time.\n")
                 elif pHigh > threshold and totalHigh > totalLow:
-                    feedbackList.append("You spoke too loudly "+str(pHigh)+" percent of the time, you can improve!\n")
+                    feedbackList.append("You spoke too loudly "+str(pHigh)+" percent of the time.\n")
             elif m == "clarity":
                 total = 0
                 for d in dataList:
                     total += ( d < metrics[m]["min"] ) # sum the number of times it is below the min
                 percent = int(round(float(total)/len(dataList) * 100))
-                feedbackList.append("I couldn't understand you " + str(percent) + " percent of the time.\n")
+                feedbackList.append("I could not understand you " + str(percent) + " percent of the time.\n")
             else:
                 generateGestureFeedback(m, dataList, feedbackList, gestureCount)
             
@@ -276,7 +280,7 @@ def main():
     metrics = {}
     historicalData = {}
 
-    maxtime = 80 # in seconds
+    maxtime = 80*60 # in seconds
     try: # do the following unless maxtime is reached:
         with timeout(maxtime, exception=RuntimeError):
             # it calls configure, passing in the metrics structure

@@ -7,7 +7,6 @@ from naoqi import ALProxy
 import time
 import threading
 from threading import Thread
-import pygame
 
 
 def StiffnessOn(proxy):
@@ -860,108 +859,341 @@ def gesture_7_coverears(motionProxy):
     keys = list()
 
     names.append("HeadPitch")
-    times.append([2.6, 4.12])
-    keys.append([-0.158044, 0.506789])
+    times.append([0.56, 2.12])
+    keys.append([-0.208666, 0.15029])
 
     names.append("HeadYaw")
-    times.append([2.6, 4.12])
-    keys.append([-0.0307219, -0.069072])
+    times.append([0.56, 2.12])
+    keys.append([-0.0353239, -0.0644701])
 
     names.append("LAnklePitch")
-    times.append([2.6])
-    keys.append([0.0919981])
+    times.append([0.56])
+    keys.append([0.0935321])
 
     names.append("LAnkleRoll")
-    times.append([2.6])
-    keys.append([-0.130348])
+    times.append([0.56])
+    keys.append([-0.138018])
 
     names.append("LElbowRoll")
-    times.append([2.6, 4.12])
-    keys.append([-0.41874, -1.53549])
+    times.append([0.56, 2.12])
+    keys.append([-0.409536, -1.54462])
 
     names.append("LElbowYaw")
-    times.append([2.6, 4.12])
-    keys.append([-1.2119, -1.55552])
+    times.append([0.56, 2.12])
+    keys.append([-1.17048, -1.45274])
 
     names.append("LHand")
-    times.append([2.6, 4.12])
-    keys.append([0.2876, 0.5648])
+    times.append([0.56, 2.12])
+    keys.append([0.2928, 0.0216])
 
     names.append("LHipPitch")
-    times.append([2.6])
-    keys.append([0.128898])
+    times.append([0.56])
+    keys.append([0.127364])
 
     names.append("LHipRoll")
-    times.append([2.6])
-    keys.append([0.105888])
+    times.append([0.56])
+    keys.append([0.10282])
 
     names.append("LHipYawPitch")
-    times.append([2.6])
-    keys.append([-0.16563])
+    times.append([0.56])
+    keys.append([-0.1733])
 
     names.append("LKneePitch")
-    times.append([2.6])
-    keys.append([-0.092082])
+    times.append([0.56])
+    keys.append([-0.0813439])
 
     names.append("LShoulderPitch")
-    times.append([2.6, 4.12])
-    keys.append([1.46953, -0.0844119])
+    times.append([0.56, 2.12])
+    keys.append([1.4864, -0.64739])
 
     names.append("LShoulderRoll")
-    times.append([2.6, 4.12])
-    keys.append([0.171766, -0.306842])
+    times.append([0.56, 2.12])
+    keys.append([0.16563, -0.16418])
 
     names.append("LWristYaw")
-    times.append([2.6, 4.12])
-    keys.append([0.076658, -0.326784])
+    times.append([0.56, 2.12])
+    keys.append([0.076658, 0.747016])
 
     names.append("RAnklePitch")
-    times.append([2.6])
-    keys.append([0.090548])
+    times.append([0.56])
+    keys.append([0.0828779])
 
     names.append("RAnkleRoll")
-    times.append([2.6])
-    keys.append([0.135034])
+    times.append([0.56])
+    keys.append([0.130432])
 
     names.append("RElbowRoll")
-    times.append([2.6, 4.12])
-    keys.append([0.423426, 1.54462])
+    times.append([0.56, 2.12])
+    keys.append([0.388144, 1.5141])
 
     names.append("RElbowYaw")
-    times.append([2.6, 4.12])
-    keys.append([1.21028, 1.38823])
+    times.append([0.56, 2.12])
+    keys.append([1.17654, 1.54316])
 
     names.append("RHand")
-    times.append([2.6, 4.12])
-    keys.append([0.2916, 0.6864])
+    times.append([0.56, 2.12])
+    keys.append([0.2956, 0.0512])
 
     names.append("RHipPitch")
-    times.append([2.6])
-    keys.append([0.133416])
+    times.append([0.56])
+    keys.append([0.125746])
 
     names.append("RHipRoll")
-    times.append([2.6])
-    keys.append([-0.098134])
+    times.append([0.56])
+    keys.append([-0.105804])
 
     names.append("RHipYawPitch")
-    times.append([2.6])
-    keys.append([-0.16563])
+    times.append([0.56])
+    keys.append([-0.1733])
 
     names.append("RKneePitch")
-    times.append([2.6])
-    keys.append([-0.0858622])
+    times.append([0.56])
+    keys.append([-0.0873961])
 
     names.append("RShoulderPitch")
-    times.append([2.6, 4.12])
-    keys.append([1.46041, -0.246932])
+    times.append([0.56, 2.12])
+    keys.append([1.45888, -0.713268])
 
     names.append("RShoulderRoll")
-    times.append([2.6, 4.12])
-    keys.append([-0.162646, 0.19631])
+    times.append([0.56, 2.12])
+    keys.append([-0.173384, 0.282214])
 
     names.append("RWristYaw")
-    times.append([2.6, 4.12])
-    keys.append([0.0628521, 0.598218])
+    times.append([0.56, 2.12])
+    keys.append([0.07359, 0.452488])
+
+    try:
+      motionProxy.angleInterpolation(names, keys, times, True)
+    except BaseException, err:
+      print err
+
+
+    time.sleep(3)
+
+
+    names = list()
+    times = list()
+    keys = list()
+
+    names.append("HeadPitch")
+    times.append([0.52, 2.16])
+    keys.append([0.15029, -0.208666])
+
+    names.append("HeadYaw")
+    times.append([0.52, 2.16])
+    keys.append([-0.0644701, -0.0353239])
+
+    names.append("LAnklePitch")
+    times.append([2.16])
+    keys.append([0.0935321])
+
+    names.append("LAnkleRoll")
+    times.append([2.16])
+    keys.append([-0.138018])
+
+    names.append("LElbowRoll")
+    times.append([0.52, 2.16])
+    keys.append([-1.54462, -0.409536])
+
+    names.append("LElbowYaw")
+    times.append([0.52, 2.16])
+    keys.append([-1.45274, -1.17048])
+
+    names.append("LHand")
+    times.append([0.52, 2.16])
+    keys.append([0.0216, 0.2928])
+
+    names.append("LHipPitch")
+    times.append([2.16])
+    keys.append([0.127364])
+
+    names.append("LHipRoll")
+    times.append([2.16])
+    keys.append([0.10282])
+
+    names.append("LHipYawPitch")
+    times.append([2.16])
+    keys.append([-0.1733])
+
+    names.append("LKneePitch")
+    times.append([2.16])
+    keys.append([-0.0813439])
+
+    names.append("LShoulderPitch")
+    times.append([0.52, 2.16])
+    keys.append([-0.64739, 1.4864])
+
+    names.append("LShoulderRoll")
+    times.append([0.52, 2.16])
+    keys.append([-0.16418, 0.16563])
+
+    names.append("LWristYaw")
+    times.append([0.52, 2.16])
+    keys.append([0.747016, 0.076658])
+
+    names.append("RAnklePitch")
+    times.append([2.16])
+    keys.append([0.0828779])
+
+    names.append("RAnkleRoll")
+    times.append([2.16])
+    keys.append([0.130432])
+
+    names.append("RElbowRoll")
+    times.append([0.52, 2.16])
+    keys.append([1.5141, 0.388144])
+
+    names.append("RElbowYaw")
+    times.append([0.52, 2.16])
+    keys.append([1.54316, 1.17654])
+
+    names.append("RHand")
+    times.append([0.52, 2.16])
+    keys.append([0.0512, 0.2956])
+
+    names.append("RHipPitch")
+    times.append([2.16])
+    keys.append([0.125746])
+
+    names.append("RHipRoll")
+    times.append([2.16])
+    keys.append([-0.105804])
+
+    names.append("RHipYawPitch")
+    times.append([2.16])
+    keys.append([-0.1733])
+
+    names.append("RKneePitch")
+    times.append([2.16])
+    keys.append([-0.0873961])
+
+    names.append("RShoulderPitch")
+    times.append([0.52, 2.16])
+    keys.append([-0.713268, 1.45888])
+
+    names.append("RShoulderRoll")
+    times.append([0.52, 2.16])
+    keys.append([0.282214, -0.173384])
+
+    names.append("RWristYaw")
+    times.append([0.52, 2.16])
+    keys.append([0.452488, 0.07359])
+
+    try:
+      motionProxy.angleInterpolation(names, keys, times, True)
+    except BaseException, err:
+      print err
+
+def gesture_8_tilt_head(motionProxy):
+    # Choregraphe simplified export in Python.
+    names = list()
+    times = list()
+    keys = list()
+
+    names.append("HeadPitch")
+    times.append([1.16, 2.24])
+    keys.append([0.00916195, 0.325166])
+
+    names.append("HeadYaw")
+    times.append([1.16, 2.24])
+    keys.append([-0.021518, -0.895898])
+
+    names.append("LAnklePitch")
+    times.append([1.16])
+    keys.append([-0.352778])
+
+    names.append("LAnkleRoll")
+    times.append([1.16])
+    keys.append([-0.00157595])
+
+    names.append("LElbowRoll")
+    times.append([1.16, 2.24])
+    keys.append([-0.995524, -1.54462])
+
+    names.append("LElbowYaw")
+    times.append([1.16, 2.24])
+    keys.append([-1.39905, -1.13213])
+
+    names.append("LHand")
+    times.append([1.16, 2.24])
+    keys.append([0.2336, 0.6428])
+
+    names.append("LHipPitch")
+    times.append([1.16])
+    keys.append([-0.44797])
+
+    names.append("LHipRoll")
+    times.append([1.16])
+    keys.append([0.00302601])
+
+    names.append("LHipYawPitch")
+    times.append([1.16])
+    keys.append([-0.00609398])
+
+    names.append("LKneePitch")
+    times.append([1.16])
+    keys.append([0.702614])
+
+    names.append("LShoulderPitch")
+    times.append([1.16, 2.24])
+    keys.append([1.41737, 0.217786])
+
+    names.append("LShoulderRoll")
+    times.append([1.16, 2.24])
+    keys.append([0.28068, -0.18719])
+
+    names.append("LWristYaw")
+    times.append([1.16, 2.24])
+    keys.append([-0.0614018, -0.216336])
+
+    names.append("RAnklePitch")
+    times.append([1.16])
+    keys.append([-0.352778])
+
+    names.append("RAnkleRoll")
+    times.append([1.16])
+    keys.append([0.00157595])
+
+    names.append("RElbowRoll")
+    times.append([1.16, 2.24])
+    keys.append([0.995524, 0.998676])
+
+    names.append("RElbowYaw")
+    times.append([1.16, 2.24])
+    keys.append([1.39905, 0.808376])
+
+    names.append("RHand")
+    times.append([1.16, 2.24])
+    keys.append([0.2336, 0.0436])
+
+    names.append("RHipPitch")
+    times.append([1.16])
+    keys.append([-0.44797])
+
+    names.append("RHipRoll")
+    times.append([1.16])
+    keys.append([-0.00302601])
+
+    names.append("RHipYawPitch")
+    times.append([1.16])
+    keys.append([-0.00609398])
+
+    names.append("RKneePitch")
+    times.append([1.16])
+    keys.append([0.702614])
+
+    names.append("RShoulderPitch")
+    times.append([1.16, 2.24])
+    keys.append([1.41737, 1.43126])
+
+    names.append("RShoulderRoll")
+    times.append([1.16, 2.24])
+    keys.append([-0.28068, -0.159578])
+
+    names.append("RWristYaw")
+    times.append([1.16, 2.24])
+    keys.append([0.0614018, -0.108956])
+
 
     try:
       motionProxy.angleInterpolation(names, keys, times, True)
@@ -977,223 +1209,108 @@ def gesture_7_coverears(motionProxy):
     keys = list()
 
     names.append("HeadPitch")
-    times.append([0.96, 2.52])
-    keys.append([0.506789, -0.158044])
+    times.append([1.08, 2.28])
+    keys.append([0.325166, 0.00916195])
 
     names.append("HeadYaw")
-    times.append([0.96, 2.52])
-    keys.append([-0.069072, -0.0307219])
+    times.append([1.08, 2.28])
+    keys.append([-0.895898, -0.021518])
 
     names.append("LAnklePitch")
-    times.append([2.52])
-    keys.append([0.0919981])
+    times.append([2.28])
+    keys.append([-0.352778])
 
     names.append("LAnkleRoll")
-    times.append([2.52])
-    keys.append([-0.130348])
+    times.append([2.28])
+    keys.append([-0.00157595])
 
     names.append("LElbowRoll")
-    times.append([0.96, 2.52])
-    keys.append([-1.53549, -0.41874])
+    times.append([1.08, 2.28])
+    keys.append([-1.54462, -0.995524])
 
     names.append("LElbowYaw")
-    times.append([0.96, 2.52])
-    keys.append([-1.55552, -1.2119])
+    times.append([1.08, 2.28])
+    keys.append([-1.13213, -1.39905])
 
     names.append("LHand")
-    times.append([0.96, 2.52])
-    keys.append([0.5648, 0.2876])
+    times.append([1.08, 2.28])
+    keys.append([0.6428, 0.2336])
 
     names.append("LHipPitch")
-    times.append([2.52])
-    keys.append([0.128898])
+    times.append([2.28])
+    keys.append([-0.44797])
 
     names.append("LHipRoll")
-    times.append([2.52])
-    keys.append([0.105888])
+    times.append([2.28])
+    keys.append([0.00302601])
 
     names.append("LHipYawPitch")
-    times.append([2.52])
-    keys.append([-0.16563])
+    times.append([2.28])
+    keys.append([-0.00609398])
 
     names.append("LKneePitch")
-    times.append([2.52])
-    keys.append([-0.092082])
+    times.append([2.28])
+    keys.append([0.702614])
 
     names.append("LShoulderPitch")
-    times.append([0.96, 2.52])
-    keys.append([-0.0844119, 1.46953])
+    times.append([1.08, 2.28])
+    keys.append([0.217786, 1.41737])
 
     names.append("LShoulderRoll")
-    times.append([0.96, 2.52])
-    keys.append([-0.306842, 0.171766])
+    times.append([1.08, 2.28])
+    keys.append([-0.18719, 0.28068])
 
     names.append("LWristYaw")
-    times.append([0.96, 2.52])
-    keys.append([-0.326784, 0.076658])
+    times.append([1.08, 2.28])
+    keys.append([-0.216336, -0.0614018])
 
     names.append("RAnklePitch")
-    times.append([2.52])
-    keys.append([0.090548])
+    times.append([2.28])
+    keys.append([-0.352778])
 
     names.append("RAnkleRoll")
-    times.append([2.52])
-    keys.append([0.135034])
+    times.append([2.28])
+    keys.append([0.00157595])
 
     names.append("RElbowRoll")
-    times.append([0.96, 2.52])
-    keys.append([1.54462, 0.423426])
+    times.append([1.08, 2.28])
+    keys.append([0.998676, 0.995524])
 
     names.append("RElbowYaw")
-    times.append([0.96, 2.52])
-    keys.append([1.38823, 1.21028])
+    times.append([1.08, 2.28])
+    keys.append([0.808376, 1.39905])
 
     names.append("RHand")
-    times.append([0.96, 2.52])
-    keys.append([0.6864, 0.2916])
+    times.append([1.08, 2.28])
+    keys.append([0.0436, 0.2336])
 
     names.append("RHipPitch")
-    times.append([2.52])
-    keys.append([0.133416])
+    times.append([2.28])
+    keys.append([-0.44797])
 
     names.append("RHipRoll")
-    times.append([2.52])
-    keys.append([-0.098134])
+    times.append([2.28])
+    keys.append([-0.00302601])
 
     names.append("RHipYawPitch")
-    times.append([2.52])
-    keys.append([-0.16563])
+    times.append([2.28])
+    keys.append([-0.00609398])
 
     names.append("RKneePitch")
-    times.append([2.52])
-    keys.append([-0.0858622])
+    times.append([2.28])
+    keys.append([0.702614])
 
     names.append("RShoulderPitch")
-    times.append([0.96, 2.52])
-    keys.append([-0.246932, 1.46041])
+    times.append([1.08, 2.28])
+    keys.append([1.43126, 1.41737])
 
     names.append("RShoulderRoll")
-    times.append([0.96, 2.52])
-    keys.append([0.19631, -0.162646])
+    times.append([1.08, 2.28])
+    keys.append([-0.159578, -0.28068])
 
     names.append("RWristYaw")
-    times.append([0.96, 2.52])
-    keys.append([0.598218, 0.0628521])
-
-    try:
-      motionProxy.angleInterpolation(names, keys, times, True)
-    except BaseException, err:
-      print err
-
-def gesture_8_tilt_head(motionProxy):
-    # Choregraphe simplified export in Python.
-    names = list()
-    times = list()
-    keys = list()
-
-    names.append("HeadPitch")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([-0.158044, 0.364514, 0.364514, -0.158044])
-
-    names.append("HeadYaw")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([-0.0307219, 0.791502, 0.791502, -0.030722])
-
-    names.append("LAnklePitch")
-    times.append([2.04, 5.96])
-    keys.append([0.0919981, 0.091998])
-
-    names.append("LAnkleRoll")
-    times.append([2.04, 5.96])
-    keys.append([-0.130348, -0.130348])
-
-    names.append("LElbowRoll")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([-0.41874, -1.15813, -1.15813, -0.418739])
-
-    names.append("LElbowYaw")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([-1.2119, -1.15208, -1.15208, -1.2119])
-
-    names.append("LHand")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([0.2876, 0.2768, 0.2768, 0.2876])
-
-    names.append("LHipPitch")
-    times.append([2.04, 5.96])
-    keys.append([0.128898, 0.128898])
-
-    names.append("LHipRoll")
-    times.append([2.04, 5.96])
-    keys.append([0.105888, 0.105888])
-
-    names.append("LHipYawPitch")
-    times.append([2.04, 5.96])
-    keys.append([-0.16563, -0.16563])
-
-    names.append("LKneePitch")
-    times.append([2.04, 5.96])
-    keys.append([-0.092082, -0.092082])
-
-    names.append("LShoulderPitch")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([1.46953, 1.70423, 1.70423, 1.46953])
-
-    names.append("LShoulderRoll")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([0.171766, 0.25, 0.249999, 0.171766])
-
-    names.append("LWristYaw")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([0.076658, -0.104354, -0.104354, 0.076658])
-
-    names.append("RAnklePitch")
-    times.append([2.04, 5.96])
-    keys.append([0.090548, 0.090548])
-
-    names.append("RAnkleRoll")
-    times.append([2.04, 5.96])
-    keys.append([0.135034, 0.135034])
-
-    names.append("RElbowRoll")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([0.423426, 1.54171, 1.54171, 0.423426])
-
-    names.append("RElbowYaw")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([1.21028, 1.11824, 1.11824, 1.21028])
-
-    names.append("RHand")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([0.2916, 0.5952, 0.5952, 0.2916])
-
-    names.append("RHipPitch")
-    times.append([2.04, 5.96])
-    keys.append([0.133416, 0.133416])
-
-    names.append("RHipRoll")
-    times.append([2.04, 5.96])
-    keys.append([-0.098134, -0.0981341])
-
-    names.append("RHipYawPitch")
-    times.append([2.04, 5.96])
-    keys.append([-0.16563, -0.16563])
-
-    names.append("RKneePitch")
-    times.append([2.04, 5.96])
-    keys.append([-0.0858622, -0.0858622])
-
-    names.append("RShoulderPitch")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([1.46041, 0.070606, 0.0706061, 1.46041])
-
-    names.append("RShoulderRoll")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([-0.162646, 0.156426, 0.156426, -0.162646])
-
-    names.append("RWristYaw")
-    times.append([2.04, 3.16, 4.8, 5.96])
-    keys.append([0.0628521, -0.23321, -0.233211, 0.0628521])
+    times.append([1.08, 2.28])
+    keys.append([-0.108956, 0.0614018])
 
 
     try:
@@ -1208,108 +1325,109 @@ def gesture_9_nod(motionProxy):
     times = list()
     keys = list()
     names.append("HeadPitch")
-    times.append([2.6, 3.28, 4.04, 4.88, 5.64])
-    keys.append([-0.158044, 0.511176, -0.158044, 0.511176, -0.158044])
+    times.append([0.4, 1.2, 1.84, 2.6, 3.44])
+    keys.append([-0.161112, 0.513247, -0.161112, 0.513247, -0.161112])
 
     names.append("HeadYaw")
-    times.append([2.6, 3.28, 4.04, 4.88, 5.64])
-    keys.append([-0.0307219, -0.019984, -0.030722, -0.019984, -0.030722])
+    times.append([0.4, 1.2, 1.84, 2.6, 3.44])
+    keys.append([-0.0291879, 0.0137641, -0.0291878, 0.0137641, -0.0291878])
 
     names.append("LAnklePitch")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([0.0919981, 0.091998, 0.091998])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([0.0889301, 0.0889301, 0.0889301])
 
     names.append("LAnkleRoll")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([-0.130348, -0.130348, -0.130348])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([-0.131882, -0.131882, -0.131882])
 
     names.append("LElbowRoll")
-    times.append([2.6, 4.04, 5.64])
+    times.append([0.4, 1.84, 3.44])
     keys.append([-0.41874, -0.418739, -0.418739])
 
     names.append("LElbowYaw")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([-1.2119, -1.2119, -1.2119])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([-1.21344, -1.21344, -1.21344])
 
     names.append("LHand")
-    times.append([2.6, 4.04, 5.64])
+    times.append([0.4, 1.84, 3.44])
     keys.append([0.2876, 0.2876, 0.2876])
 
     names.append("LHipPitch")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([0.128898, 0.128898, 0.128898])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([0.136568, 0.136568, 0.136568])
 
     names.append("LHipRoll")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([0.105888, 0.105888, 0.105888])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([0.101286, 0.101286, 0.101286])
 
     names.append("LHipYawPitch")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([-0.16563, -0.16563, -0.16563])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([-0.164096, -0.164096, -0.164096])
 
     names.append("LKneePitch")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([-0.092082, -0.092082, -0.092082])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([-0.0874801, -0.0874801, -0.0874801])
 
     names.append("LShoulderPitch")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([1.46953, 1.46953, 1.46953])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([1.468, 1.468, 1.468])
 
     names.append("LShoulderRoll")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([0.171766, 0.171766, 0.171766])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([0.170232, 0.170232, 0.170232])
 
     names.append("LWristYaw")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([0.076658, 0.076658, 0.076658])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([0.075124, 0.075124, 0.075124])
 
     names.append("RAnklePitch")
-    times.append([2.6, 4.04, 5.64])
+    times.append([0.4, 1.84, 3.44])
     keys.append([0.090548, 0.090548, 0.090548])
 
     names.append("RAnkleRoll")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([0.135034, 0.135034, 0.135034])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([0.1335, 0.1335, 0.1335])
 
     names.append("RElbowRoll")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([0.423426, 0.423426, 0.423426])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([0.420358, 0.420357, 0.420357])
 
     names.append("RElbowYaw")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([1.21028, 1.21028, 1.21028])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([1.20722, 1.20722, 1.20722])
 
     names.append("RHand")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([0.2916, 0.2916, 0.2916])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([0.2876, 0.2876, 0.2876])
 
     names.append("RHipPitch")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([0.133416, 0.133416, 0.133416])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([0.136484, 0.136484, 0.136484])
 
     names.append("RHipRoll")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([-0.098134, -0.0981341, -0.0981341])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([-0.10427, -0.10427, -0.10427])
 
     names.append("RHipYawPitch")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([-0.16563, -0.16563, -0.16563])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([-0.164096, -0.164096, -0.164096])
 
     names.append("RKneePitch")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([-0.0858622, -0.0858622, -0.0858622])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([-0.0889301, -0.0889301, -0.0889301])
 
     names.append("RShoulderPitch")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([1.46041, 1.46041, 1.46041])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([1.46348, 1.46348, 1.46348])
 
     names.append("RShoulderRoll")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([-0.162646, -0.162646, -0.162646])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([-0.173384, -0.173384, -0.173384])
 
     names.append("RWristYaw")
-    times.append([2.6, 4.04, 5.64])
-    keys.append([0.0628521, 0.0628521, 0.0628521])
+    times.append([0.4, 1.84, 3.44])
+    keys.append([0.0597839, 0.059784, 0.059784])
+
 
     try:
       motionProxy.angleInterpolation(names, keys, times, True)
@@ -1785,7 +1903,6 @@ def gangnam_style(postureProxy,audioProxy,motionProxy):
     # postureProxy.goToPosture("StandInit", 1.0)
     # fileId = audioProxy.loadFile("home/human/Desktop/gangnamstyle.wav")
     # Choregraphe simplified export in Python.
-
     names = list()
     times = list()
     keys = list()
@@ -1894,12 +2011,8 @@ def gangnam_style(postureProxy,audioProxy,motionProxy):
     times.append([0.96, 1.32, 1.64, 1.88, 2.12, 2.36, 2.6, 2.84, 3.08, 3.32, 3.56, 3.8, 4.04, 4.28, 4.76, 5, 5.24, 5.48, 5.72, 5.96, 6.2, 6.44, 6.68, 6.92, 7.16, 7.4, 7.64, 7.88, 8.36, 8.6, 8.84, 9.08, 9.32, 9.56, 9.8, 10.04, 10.28, 10.52, 10.76, 11, 11.24, 11.48, 11.72, 11.96, 12.2, 13, 13.24, 13.48, 13.72, 13.96, 14.2, 14.44, 14.68, 14.92, 15.16, 15.4, 15.64, 15.88, 16.24, 16.64])
     keys.append([0.115008, 0.115008, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, 1.50029, 1.7794])
 
-    #audioProxy.post.playFile("/home/human/Prezence/kinetic_feedback/pynaoqi-python2.7-2.1.2.17-linux64/gangnamstyle.wav",0.5,0.5)
-    pygame.init()
-    pygame.mixer.music.load('kinetic_feedback/gangnamstyle.wav')
-    pygame.mixer.music.play()
-    #pygame.quit()
-    motionProxy.angleInterpolation(names, keys, times, True)
+    audioProxy.post.playFile("home/human/Desktop/gangnamstyle.wav",0.5,0.5)
+    # motionProxy.angleInterpolation(names, keys, times, True)
     # postureProxy.goToPosture("StandInit", 1.0)
 
 def taichiquan(postureProxy,audioProxy,motionProxy):
@@ -2245,6 +2358,7 @@ def main(robotIP,robotPort):
     # Turn on the Motors
     motionProxy.wakeUp()
 
+
     # ledsProxy.bIsRunning = True;
     # ledsProxy.bMustStop = False;
 
@@ -2261,6 +2375,8 @@ def main(robotIP,robotPort):
     #     break;
     #   ledsProxy.fadeRGB( "FaceLedsInternal", 0x00ff00, rDuration );
 
+
+    # gangnam_style(postureProxy,audioProxy,motionProxy)
     # taichiquan(postureProxy,audioProxy,motionProxy)
 
 
@@ -2269,35 +2385,18 @@ def main(robotIP,robotPort):
 
     #StandUp
     postureProxy.goToPosture("Stand", 3.0)
-    
-    animatedSpeechProxy.say("These are some of the gestures I will do.", gesture_confused)
+    # motionProxy.rest()
+
+    # gesture_1_handwave(motionProxy)
+
+    # gangnam_style(postureProxy,audioProxy,motionProxy)
 
 
-    animatedSpeechProxy.post.say("If you are looking down, I'll wave my hands like this", gesture_confused)
-    gesture_1_handwave(motionProxy)
 
 
-    animatedSpeechProxy.post.say("If your voice is unclear, I will scratch my head" , gesture_confused)
-    gesture_4_scratchhead(motionProxy,postureProxy)
-    postureProxy.goToPosture("Stand", 4.0)
-
-
-    animatedSpeechProxy.post.say("If you are talking too quickly, I will ask you to slow down" , gesture_confused)
-    gesture_5_arms(motionProxy)
-    postureProxy.goToPosture("Stand", 4.0)
-
-
-    animatedSpeechProxy.post.say("If you are talking too slowly, I will ask you to speed up" , gesture_confused)
-    gesture_6_speedup(motionProxy,postureProxy)
-
-    animatedSpeechProxy.post.say("If you are talking too loudly, I will cover my ears" , gesture_confused)
-    gesture_7_coverears(motionProxy)
-
-    animatedSpeechProxy.post.say("And lastly, if you are talking too softly, I will ask you to speak louder" , gesture_confused)
-    gesture_8_tilt_head(motionProxy)
 
     #==================Check for Presentation to Begin===========================
-    time.sleep(1) #change back to 1
+    time.sleep(8)
 
     animatedSpeechProxy.say("Please raise your right arm to begin when you're ready", gesture_confused)
 
@@ -2341,50 +2440,59 @@ def main(robotIP,robotPort):
         else:
             #if kinetic feedback output file changes
             print "perform function"
-            if line.rstrip('\n') != 0:
-                #do output            
-                char  = int(line.rstrip('\n'))
-                if char == 1:
-                    postureProxy.goToPosture("Stand", 2.0)
-                    gesture_1_handwave(motionProxy)
-                    print "handwave gesture, head_gaze_low"
+            # if line.rstrip('\n') != 0:
+            #     #do output            
+            #     char  = int(line.rstrip('\n'))
+            #     if char == 1:
+            #         postureProxy.goToPosture("Stand", 2.0)
+            #         gesture_1_handwave(motionProxy)
+            #         print "handwave gesture, head_gaze_low"
 
-                elif char == 2:
-                    gesture_2_puthandsdown(animatedSpeechProxy)
-                    print "put hands down, covering_mouth_high"
+            #     elif char == 2:
+            #         gesture_2_puthandsdown(motionProxy)
+            #         print "put hands down, covering_mouth_high"
 
-                elif char == 3:
-                    gesture_3_leaning(motionProxy)
-                    print "leaning,posture_low"
+            #     elif char == 3:
+            #         gesture_3_leaning(motionProxy)
+            #         print "leaning,posture_low"
 
-                elif char == 4:
-                    gesture_4_scratchhead(motionProxy,postureProxy)
-                    print "scratchhead,clarity_low"
+            #     elif char == 4:
+            #         gesture_4_scratchhead(motionProxy,postureProxy)
+            #         print "scratchhead,clarity_low"
 
-                elif char ==5:
-                    gesture_5_arms(motionProxy)
-                    print "raise up and down, speed_high"
+            #     elif char ==5:
+            #         postureProxy.goToPosture("Stand", 2.0)
+            #         gesture_5_arms(motionProxy)
+            #         print "raise up and down, speed_high"
 
-                elif char ==6:
-                    gesture_6_speedup(motionProxy,postureProxy)
-                    print "speedup gesture, Speed Too Slow"                    
+            #     elif char ==6:
+            #         gesture_6_speedup(motionProxy,postureProxy)
+            #         print "speedup gesture, Speed Too Slow"                    
 
-                elif char ==7:
-                    postureProxy.goToPosture("Stand", 3.0)
-                    gesture_7_coverears(motionProxy)
-                    print "Cover ears, volume_high"                    
+            #     elif char ==7:
+            #         postureProxy.goToPosture("Stand", 3.0)
+            #         gesture_7_coverears(motionProxy)
+            #         print "Cover ears, volume_high"                    
 
-                elif char ==8:
-                    gesture_8_tilt_head(motionProxy)
-                    postureProxy.goToPosture("Stand", 3.0)
+            #     elif char ==8:
+            #         gesture_8_tilt_head(motionProxy)
+            #         print "tilt head, volume_low"                    
 
-                    print "tilt head, volume_low"                    
+            #     else:
+            #         postureProxy.goToPosture("Stand", 3.0)
+            #         gesture_9_nod(motionProxy)
+            #         print "Nodding Head and standing chill" 
 
-                else:
-                    postureProxy.goToPosture("Stand", 3.0)
-                    gesture_9_nod(motionProxy)
-                    print "Nodding Head and standing chill" 
 
+
+        # if not syncline or syncline in ['\n','\n']:
+        #     print "No new line detected in Sync File"
+        #     time.sleep(1)
+        #     syncFile.seek(syncwhere)
+        # else:
+        #     if syncline.rstrip('\n') == "stop":
+        #         print "New line detected in sync file"
+        #         stop = True
 
         # check if sync has said to stop
         syncFileStop = open("output/sync.txt", 'r')
@@ -2392,38 +2500,39 @@ def main(robotIP,robotPort):
             if sline.rstrip('\n') == "stop":
                 stop = True
                 print "User called for stop"
-                break
         syncFileStop.close()
+
+
+            
 
     animatedSpeechProxy.say("Well Done!", gesture_confused)
     print "End Presentation"
 
-    # animatedSpeechProxy.say("Begin Post Speech Feedback", gesture_confused)
-    print "Begin Post-Speech Feedback"
+    # # animatedSpeechProxy.say("Begin Post Speech Feedback", gesture_confused)
+    # print "Begin Post-Speech Feedback"
 
-    postspeech_feedbackfile = open('output/postspeech_feedback.txt', 'r')    
+    # postspeech_feedbackfile = open('output/postspeech_feedback.txt', 'r')    
     
-    data=postspeech_feedbackfile.read()
+    # data=postspeech_feedbackfile.read()
 
-    animatedSpeechProxy.say(data, gesture_confused)
+    # animatedSpeechProxy.say(data, gesture_confused)
 
-    # animatedSpeechProxy.say("End Post Speech Feedback", gesture_confused)
-    print "End Post-Speech Feedback, Terminating Robot... Unless you did that!!"
+    # # animatedSpeechProxy.say("End Post Speech Feedback", gesture_confused)
+    # print "End Post-Speech Feedback, Terminating Robot"
 
 
+    # gesture_confused(robotIP)
+    # StandUp(postureProxy)
 
-    # check if sync has said to stop
-    gfile = open("output/gangnam_file.txt", 'r')
-    for sline in gfile:
-        if sline.rstrip('\n') == "opp":
-            stop = True
-            print "User called for gangnam style"
-            animatedSpeechProxy.say("Get Ready for Dancing", gesture_confused)
-            gangnam_style(postureProxy,audioProxy,motionProxy)
-            break
+    # ttsProxy.say("Shut up weicong")
 
-    gfile.close()
+    # StandUp(postureProxy)
 
+    # squat(robotIP)
+
+    # SitDown(postureProxy)
+
+    # StiffnessOff(motionProxy)
 
     motionProxy.rest()
     
@@ -2431,7 +2540,7 @@ if __name__ == "__main__":
     robotIp = "169.254.44.123" #Set a default IP here
     # robotIp = "127.0.0.1" #Set a default IP here
     robotPort = 9559 #Set default POort here
-    # robotPort = 40676 #Set default POort here
+    # robotPort = 45555 #Set default POort here
 
     # if len(sys.argv) < 2:
     #     print "Usage python robotIP please"
@@ -2444,4 +2553,3 @@ if __name__ == "__main__":
     #     robotPort = int(sys.argv[2])
 
     main(robotIp, robotPort)
-

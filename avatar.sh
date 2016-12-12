@@ -6,4 +6,4 @@ export PYTHONPATH=$PYTHONPATH:/home/human/Prezence/kinetic_feedback/pynaoqi-pyth
 xterm -title "Central Proc" -hold -e python central_proc/tailored_cp.py  &
 xterm -title "Speech Module" -hold -e sudo python speech/speech.py &
 xterm -title "Computer Vision" -hold -e rosrun skeleton_monitor skeleton_monitor  &
-xterm -title "Gesture" -hold -e  python kinetic_feedback/kinetic_feedback.py
+xterm -title "Gesture" -hold -e  python kinetic_feedback/kinetic_feedback_avatar.py

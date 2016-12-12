@@ -20,8 +20,6 @@ def countlines(startstopfile):
 			lines = lines + 1
 	return lines
 
-#REMEMBER TO RUN IN SPEECH FOLDER BECAUSE OF THE WAY FILES ARE ADDRESSED AND CREATED
-
 # try:
 # 	os.remove("output/speed.txt")
 # 	os.remove("output/clarity.txt")
@@ -29,6 +27,7 @@ def countlines(startstopfile):
 # except:
 # 	print("file does not exist")
 
+# Open and clear file
 try:
 	f_speed = open("output/speed.txt" , "w")
 	f_clarity = open("output/clarity.txt" , "w")
@@ -54,9 +53,9 @@ except IOError:
 # obtain audio from the microphone
 r = sr.Recognizer()
 
-m = 0
-for i, microphone_name in enumerate(sr.Microphone.list_microphone_names()):
-	if microphone_name == "USB audio CODEC: Audio (hw:1,0)":
+m = 0 #default to default audio input device first
+for i, microphone_name in enumerate(sr.Microphone.list_microphone_names()): #Find our USB microphone
+	if microphone_name == "USB audio CODEC: Audio (hw:1,0)": 
 		m = i
 		break
 
@@ -66,9 +65,8 @@ with sr.Microphone(device_index=m, sample_rate = 16000, chunk_size = 1024) as so
 	#timer_HCR=int(timer_HCR)
 	audio = r.record(source,duration=timer_HCR)
 
-audioasstring = audio.get_raw_data()
+audioasstring = audio.get_raw_data() #Get background noise and store as variable
 background_noise = audioop.rms(audioasstring, 2) #2 means 2 bytes per sample i.e 16-bit audio
-#noisefloor = audioop.minmax(audioasstring, 2)
 		
 
 presentation_start = False
@@ -110,7 +108,8 @@ while(presentation_start == False):
 	# 	except IOError:
 	# 		print "creating startfile went wrong"
 	# 		sys.exit(1)
-	print("Still waiting")
+
+	#print("Still waiting")
 	numlines = countlines("output/sync.txt")
 	if(numlines >= 1):
 		presentation_start = True
@@ -140,7 +139,7 @@ while(presentation_start is True):
 		#r = sr.Recognizer()
 		with sr.Microphone(device_index=m) as source:
 			print("Say something!")
-			timer_HCR = os.getenv('timer' , 5) #time to listen for in seconds
+			timer_HCR = os.getenv('timer' , 4) #time to listen for in seconds
 			timer_HCR=int(timer_HCR)
 			audio = r.record(source,duration=timer_HCR)
 				##clarity of speech
@@ -153,8 +152,8 @@ while(presentation_start is True):
 			print("Prezence could not understand audio")
 			number=0
 			rec="NULL"
-			space_split=-1
-			print("confice level is:" + str(number) +" for " + str(rec)+" ," +"number of spaces is: " + str(space_split) )
+			space_split=0
+			#print("confice level is:" + str(number) +" for " + str(rec)+" ," +"number of spaces is: " + str(space_split) )
 			f_speed.write(str(time.time()) + " " +str(space_split)+ "\n")
 			f_clarity.write(str(time.time()) + " " +str(number)+ "\n")
 			f_content.write("prezence does not understand your speech \n" )
@@ -170,9 +169,9 @@ while(presentation_start is True):
 
 
 
-		print("Google Speech Recognition thinks you said " + rec + "\n") 
+		print("Google: " + rec) 
 			
-		print("confice level is:" + str(number) +" for " + rec )
+		print("Clarity: " + str(number))
 		
 		f_clarity.write(str(time.time()) + " " + str(number)+ "\n")
 		f_content.write(rec+ "\n")
@@ -191,9 +190,10 @@ while(presentation_start is True):
 
 		
 		##fast/slow speaking
-		space_split=len(rec.split(" "))
-		print("number of words spoken is:" +" " + str(space_split))
-		f_speed.write(str(time.time()) + " " + str(20*int(space_split))+ "\n")
+		space_split=20*len(rec.split(" "))
+		#print("number of words spoken is:" +" " + str(space_split))
+		print("WPM: " + str(space_split))
+		f_speed.write(str(time.time()) + " " + str(space_split)+ "\n")
 		
 		#>150 wpm
 		# if(space_split> (2.4*timer_HCR) ):
@@ -249,7 +249,7 @@ while(presentation_start is True):
 
 		#get number of lines
 		numlines = countlines("output/sync.txt")
-		print("number of lines: " + str(numlines))
+		print("synclines: " + str(numlines) + "\n")
 		if (numlines >= 2):
 			presentation_start = False
 	################END OF START STOP#############################################################################
@@ -272,6 +272,7 @@ while(presentation_start is True):
 	except sr.RequestError as e:
 		print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
+	# Close all files before next loop/exiting while loop
 	f_speed.close()
 	f_clarity.close()
 	f_content.close()
