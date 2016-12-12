@@ -2407,6 +2407,9 @@ def main(robotIP,robotPort):
 
     animatedSpeechProxy.say(data, gesture_confused)
 
+    animatedSpeechProxy.say("Goodbye!", gesture_confused)
+
+
     # animatedSpeechProxy.say("End Post Speech Feedback", gesture_confused)
     print "End Post-Speech Feedback, Terminating Robot... Unless you did that!!"
 
@@ -2418,7 +2421,7 @@ def main(robotIP,robotPort):
         if sline.rstrip('\n') == "opp":
             stop = True
             print "User called for gangnam style"
-            animatedSpeechProxy.say("Get Ready for Dancing", gesture_confused)
+            animatedSpeechProxy.say("Well done for finding the secret move! Get Ready for Dancing", gesture_confused)
             gangnam_style(postureProxy,audioProxy,motionProxy)
             break
 
