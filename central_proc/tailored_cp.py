@@ -4,9 +4,10 @@ from interruptingcow import timeout
 startTime = 0
 ROBOT_DELAY = 15
 lastFeedback = 0
+TIME_DELAY_MAX = 1
 FEEDBACK_MAP = {
     "head_gaze_low": 1,
-    "covering_mouth": 2,
+    "covering_mouth_high": 2,
     # "posture_low": 3,
     "clarity_low": 4,
     "speed_high": 5,
@@ -55,19 +56,38 @@ def makeFeedbackDecision(metrics, concerningData, feedbackFile):
     currentFeedback=""
     currentMetric=""
     for m, info in concerningData.iteritems():
+        # if m == "gesture":
+        #     coveringMouthTotal = 0
+        #     for i in info:
+        #         if i['data'] == "covering_mouth":
+        #             coveringMouthTotal += 1
+
+        # else: 
+        coveringMouthTotal = 0
         for i in info:
             # expire old feedback - THIS COULD BE MORE SOPHISTICATED
             if time.time()-i['timestamp'] > expireTime:
                 info.remove(i)
                 # print "Removing a concern from "+m
+            if m == "gesture":
+                if i['data'] == "covering_mouth":
+                    coveringMouthTotal += 1
             # it compares the data to the allowance and priority given in config
             # and finds the item that is the greatest outside the allowance and has the highest priority and flags this
             # print m+" "+str(len(info))+" "+str(metrics[m]['priority'])
-            if len(info) > metrics[m]['allowance']:
-                if metrics[m]['priority'] < currentPriority:
-                    currentFeedback=m+"_"+i['issue']
-                    currentPriority=metrics[m]['priority']
-                    currentMetric=m
+        problemMetric = ""
+        if m == "gesture":
+            if len(info) > 0:
+                gestureName = info[0]['data']
+                if coveringMouthTotal > metrics[gestureName]['allowance']:
+                    problemMetric = gestureName
+        elif len(info) > metrics[m]['allowance']:
+            if metrics[m]['priority'] < currentPriority:
+                problemMetric = m
+        if not problemMetric == "" and metrics[problemMetric]['priority'] < currentPriority:
+            currentFeedback=problemMetric+"_"+i['issue']
+            currentPriority=metrics[problemMetric]['priority']
+            currentMetric=problemMetric
     print "Feedback will be for: "+currentFeedback
     global lastFeedback
     if currentFeedback != "":
@@ -78,14 +98,20 @@ def makeFeedbackDecision(metrics, concerningData, feedbackFile):
         # want to remove all the previous concerns about this issue because theoretically they've learned now
         concerningData[currentMetric] = []
 
+def isGesture(metric):
+    return not (metric == "clarity" or metric == "speed" or metric == "volume" or metric == "head_gaze")
+
 # function: giveKineticFeedback
 def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
     global startTime
     # this function givesKineticFeedback based on the inputs
-    concerningData = {}
+    concerningData = { "gesture": [] }
+    historicalData["gesture"] = []
     for m in metrics:
-        concerningData[m] = []
-        historicalData[m] = []
+        if not isGesture(m):
+            concerningData[m] = []
+            historicalData[m] = []
+
     stop = False
     # while not told to stop:
     while not stop:
@@ -109,26 +135,36 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
                     f.seek(f.tell())
                     continue
                 value = 0
-                if m == "clarity" or m == "speed" or m == "volume" or m == "head_gaze":
+                metric = ""
+                if not isGesture(m):
                     value = float(data[1])
+                    metric = m
+                    # checks it against thresholds, adds to concerningData if a problem
+                    maybeAppend = {"timestamp": float(data[0]), "data": value}
+                    if "min" in metrics[m]:
+                        if value < metrics[m]['min']:
+                            concern = True
+                            maybeAppend['issue'] = "low"
+                            concerningData[m].append(maybeAppend)
+                            print m+" concerningly low"
+                    if "max" in metrics[m]:
+                        if value > metrics[m]['max']:
+                            concern = True
+                            maybeAppend['issue'] = "high"
+                            concerningData[m].append(maybeAppend)
+                            print m+" concerningly high"
                 else:
-                    value = 1
-                historicalData[m].append(value)
-                print "reading "+m+" "+str(time.time()-float(data[0]))+" seconds after writing"
-                # checks it against thresholds, adds to concerningData if a problem
-                maybeAppend = {"timestamp": float(data[0]), "data": value}
-                if "min" in metrics[m]:
-                    if float(data[1]) < metrics[m]['min']:
-                        concern = True
-                        maybeAppend['issue'] = "low"
-                        concerningData[m].append(maybeAppend)
-                        print m+" concerningly low"
-                if "max" in metrics[m]:
-                    if float(data[1]) > metrics[m]['max']:
-                        concern = True
-                        maybeAppend['issue'] = "high"
-                        concerningData[m].append(maybeAppend)
-                        print m+" concerningly high"
+                    value = data[1]
+                    metric = "gesture"
+                    maybeAppend = {"timestamp": float(data[0]), "data": value}
+                    if value == "covering_mouth":
+                        maybeAppend["issue"] = "high"
+                        concerningData[metric].append(maybeAppend)
+                historicalData[metric].append(value)
+                timeDelay = time.time()-float(data[0])
+                if timeDelay > TIME_DELAY_MAX:
+                    print "reading "+m+" "+str(timeDelay)+" seconds after writing"
+
                 line = f.readline()
                 f.seek(f.tell())
         global lastFeedback
@@ -147,20 +183,27 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
 
 def generateGestureFeedback(m, dataList, feedbackList, gestureCount):
     feedback = ""
-    total = 0
+    totals = {}
     for d in dataList:
-        total += d
-    percent = int(round(float(total)/gestureCount * 100))
-    action = m.split('_')
-    if m == "folding_arms" or m == "covering_mouth":
-        feedback = "You were "+action[0]+" your "+action[1]+" "+str(percent)+" percent of the time.\n"
-    elif m == "poor_posture":
-        feedback = "You had "+action[0]+" "+action[1]+" "+str(percent)+" percent of the time.\n"
-    elif m == "turning_away" or m == "looking_down":
-        feedback = "You were "+action[0]+" "+action[1]+" "+str(percent)+" percent of the time.\n"
-    threshold = 10
-    if percent > threshold:
-        feedbackList.append(feedback)
+        if d in totals:
+            totals[d] += 1
+        else:
+            totals[d] = 1
+    for d in dataList:
+        if d in totals:
+            total = totals[d]
+            percent = int(round(float(total)/gestureCount * 100))
+            action = d.split('_')
+            if d == "folding_arms" or d == "covering_mouth":
+                feedback = "You were "+action[0]+" your "+action[1]+" "+str(percent)+" percent of the time.\n"
+            elif d == "poor_posture":
+                feedback = "You had "+action[0]+" "+action[1]+" "+str(percent)+" percent of the time.\n"
+            elif d == "turning_away" or d == "looking_down":
+                feedback = "You were "+action[0]+" "+action[1]+" "+str(percent)+" percent of the time.\n"
+            threshold = 10
+            if percent > threshold:
+                feedbackList.append(feedback)
+            del totals[d]
 
 # function: givePostFeedback
 def givePostFeedback(historicalData, metrics, timeTaken):
@@ -175,13 +218,14 @@ def givePostFeedback(historicalData, metrics, timeTaken):
     for m, dataList in historicalData.iteritems():
         print m
         print len(dataList)
-        if len(dataList) > 1:
+        # print dataList
+        if len(dataList) > 0:
             if m == "head_gaze":
                 total = 0
                 for d in dataList:
-                    total += ( d > metrics[m]["min"] ) # sum the number of times it is above the min
+                    total += ( d < metrics[m]["min"] ) # sum the number of times it is above the min
                 percent = int(round(float(total)/len(dataList) * 100))
-                feedbackList.append("You looked at me " + str(percent) + " percent of the time.\n")
+                feedbackList.append("You were looking down " + str(percent) + " percent of the time.\n")
             elif m == "speed":
                 total = 0
                 for d in dataList:
@@ -232,7 +276,7 @@ def main():
     metrics = {}
     historicalData = {}
 
-    maxtime = 30 # in seconds
+    maxtime = 80 # in seconds
     try: # do the following unless maxtime is reached:
         with timeout(maxtime, exception=RuntimeError):
             # it calls configure, passing in the metrics structure
