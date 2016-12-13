@@ -2407,7 +2407,7 @@ def main(robotIP,robotPort):
 
     animatedSpeechProxy.say(data, gesture_confused)
 
-    animatedSpeechProxy.say("Goodbye!", gesture_confused)
+    animatedSpeechProxy.say("Thank you!", gesture_confused)
 
 
     # animatedSpeechProxy.say("End Post Speech Feedback", gesture_confused)

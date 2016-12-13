@@ -2540,7 +2540,7 @@ if __name__ == "__main__":
     # robotIp = "169.254.81.130" #Set a default IP here
     robotIp = "127.0.0.1" #Set a default IP here
     # robotPort = 9559 #Set default POort here
-    robotPort = 43793 #Set default POort here
+    robotPort = 35319 #Set default POort here
 
     # if len(sys.argv) < 2:
     #     print "Usage python robotIP please"

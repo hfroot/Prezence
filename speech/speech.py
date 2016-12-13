@@ -149,7 +149,7 @@ while(presentation_start is True):
 			number=(msg_json['alternative'][0]['confidence'])
 			rec=str(msg_json['alternative'][0]['transcript'])
 		except:
-			print("Prezence could not understand audio")
+			print("Prezence could not understand audio\n")
 			number=0
 			rec="NULL"
 			space_split=0
@@ -158,6 +158,11 @@ while(presentation_start is True):
 			f_clarity.write(str(time.time()) + " " +str(number)+ "\n")
 			f_content.write("prezence does not understand your speech \n" )
 			f_loud.write(str(time.time()) + " 0\n")
+
+			numlines = countlines("output/sync.txt")
+			print("synclines: " + str(numlines) + "\n")
+			if (numlines >= 2):
+				presentation_start = False
 			continue
 
 
@@ -269,8 +274,18 @@ while(presentation_start is True):
 		f_content.write("prezence does not understand your speech \n" )
 		f_loud.write('0\n')
 
+		numlines = countlines("output/sync.txt")
+		print("synclines: " + str(numlines) + "\n")
+		if (numlines >= 2):
+			presentation_start = False
+
 	except sr.RequestError as e:
 		print("Could not request results from Google Speech Recognition service; {0}".format(e))
+		
+		numlines = countlines("output/sync.txt")
+		print("synclines: " + str(numlines) + "\n")
+		if (numlines >= 2):
+			presentation_start = False
 
 	# Close all files before next loop/exiting while loop
 	f_speed.close()

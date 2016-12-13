@@ -53,3 +53,7 @@ The convention that my workplace used over the summer (granted they used fossil 
 
 ## Adding to the README
 If you want to add to the readme file using nice formatting, check out the helpful cheatsheet [here](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
+
+##Possible errors and future improvement
+* Screen is too small, participants find it difficult to look at screen.
+* Avatar has no verbal feedback since choreographe has no audio output. We did not have enough time to make a bespoke animation independent of choreographe that is 
