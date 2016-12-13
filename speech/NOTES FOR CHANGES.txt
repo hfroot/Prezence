@@ -1,0 +1,8 @@
+-COPY audio loudness into except (get loudness)
+-Determine if loudness is signficiantly above baseline(total - noise > 500)
+-If larger than baseline, write loudness as per normal, but write clarity, speed as either
+ 1. normal value (e.g speed = 140WPM, clarity = 0.6)
+ 2. OR historical value (value from previous while loop) so save clarity and speed into a variable and write that variable into the file (no need to average because it's to expensive)
+
+WEI: I strongly prefer clarity = 0.6 for this but speed as historical so only save speed into vairable for use next loop
+sometimess I remember It could print what it was saying,but it ddidnt  have clarity :set Clarity = 0.7 

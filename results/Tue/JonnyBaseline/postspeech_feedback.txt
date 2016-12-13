@@ -1,0 +1,6 @@
+Your speech was 3 minutes and 40 seconds long.
+You spoke too quietly 50 percent of the time.
+I could not understand you 17 percent of the time.
+On average, you spoke at 198 words per minute.
+You were looking down 0 percent of the time.
+You can do better! Think about my feedback and try again.

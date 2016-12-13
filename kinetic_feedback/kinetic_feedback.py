@@ -939,7 +939,7 @@ def gesture_7_coverears(motionProxy):
       print err
 
 
-    time.sleep(2)
+    time.sleep(1)
 
 
     names = list()
@@ -2401,10 +2401,13 @@ def main(robotIP,robotPort):
     motionProxy.wakeUp()
 
     #Go to Stand    
-    postureProxy.goToPosture("Stand", 3.0)
+    postureProxy.goToPosture("StandInit", 2.0)
     
 
     animatedSpeechProxy.say("Please wait quietly while I get ready.", gesture_confused)
+
+    postureProxy.goToPosture("Stand", 2.0)
+
 
     time.sleep(5) #change back to 1
 
