@@ -159,9 +159,10 @@ while(presentation_start is True):
 				f_loud.write(str(time.time()) + " " + str(voice_vol) + "\n")
 				print("Volume: " + str(voice_vol))
 				number=0.6
-				rec="NULL"
 				space_split=7
 				f_speed.write(str(time.time()) + " " +str(space_split)+ "\n")
+				print(number)
+				print(space_split)
 				f_clarity.write(str(time.time()) + " " +str(number)+ "\n")
 				f_content.write("prezence does not understand your speech \n" )
 				numlines = countlines("output/sync.txt")
@@ -215,7 +216,7 @@ while(presentation_start is True):
 
 		
 		##fast/slow speaking
-		space_split=20*len(rec.split(" "))
+		space_split=15*len(rec.split(" "))
 		#print("number of words spoken is:" +" " + str(space_split))
 		print("WPM: " + str(space_split))
 		f_speed.write(str(time.time()) + " " + str(space_split)+ "\n")

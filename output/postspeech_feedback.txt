@@ -1,6 +1,6 @@
-Your speech was 4 minutes and 32 seconds long.
-You spoke too quietly 65 percent of the time.
-I could not understand you 26 percent of the time.
-On average, you spoke at 105 words per minute.
-You were looking down 4 percent of the time.
+Your speech was 3 minutes and 2 seconds long.
+You spoke too loudly 26 percent of the time.
+I could not understand you 15 percent of the time.
+On average, you spoke at 69 words per minute.
+You were looking down 45 percent of the time.
 You can do better! Think about my feedback and try again.

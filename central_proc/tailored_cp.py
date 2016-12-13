@@ -300,7 +300,7 @@ def main():
                         start = True
             print "starting"
             startTime = time.time()
-            time.sleep(10)
+            time.sleep(9)
             giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile)
     except RuntimeError:
         print "Stopping: run time exceeded "+str(maxtime)+" seconds"
