@@ -144,26 +144,46 @@ while(presentation_start is True):
 			audio = r.record(source,duration=timer_HCR)
 				##clarity of speech
 			msg_json=r.recognize_google(audio,show_all=True)
-
+			#print(msg_json)
 		try:
 			number=(msg_json['alternative'][0]['confidence'])
 			rec=str(msg_json['alternative'][0]['transcript'])
 		except:
 			print("Prezence could not understand audio\n")
-			number=0
-			rec="NULL"
-			space_split=0
-			#print("confice level is:" + str(number) +" for " + str(rec)+" ," +"number of spaces is: " + str(space_split) )
-			f_speed.write(str(time.time()) + " " +str(space_split)+ "\n")
-			f_clarity.write(str(time.time()) + " " +str(number)+ "\n")
-			f_content.write("prezence does not understand your speech \n" )
-			f_loud.write(str(time.time()) + " 0\n")
+			audioasstring = audio.get_raw_data()
+			loudness = audioop.rms(audioasstring, 2) #2 means 2 bytes per sample i.e 16-bit audio
+			voice_vol = loudness - background_noise
+			if(voice_vol < 0):
+				voice_vol = 0
+			if(voice_vol>500):
+				f_loud.write(str(time.time()) + " " + str(voice_vol) + "\n")
+				print("Volume: " + str(voice_vol))
+				number=0.6
+				rec="NULL"
+				space_split=7
+				f_speed.write(str(time.time()) + " " +str(space_split)+ "\n")
+				f_clarity.write(str(time.time()) + " " +str(number)+ "\n")
+				f_content.write("prezence does not understand your speech \n" )
+				numlines = countlines("output/sync.txt")
+				print("synclines: " + str(numlines) + "\n")
+				if (numlines >= 2):
+					presentation_start = False
+				continue
+			else:
+				number=0
+				rec="NULL"
+				space_split=0
+				#print("confice level is:" + str(number) +" for " + str(rec)+" ," +"number of spaces is: " + str(space_split) )
+				f_speed.write(str(time.time()) + " " +str(space_split)+ "\n")
+				f_clarity.write(str(time.time()) + " " +str(number)+ "\n")
+				f_content.write("prezence does not understand your speech \n" )
+				f_loud.write(str(time.time()) + " 0\n")
 
-			numlines = countlines("output/sync.txt")
-			print("synclines: " + str(numlines) + "\n")
-			if (numlines >= 2):
-				presentation_start = False
-			continue
+				numlines = countlines("output/sync.txt")
+				print("synclines: " + str(numlines) + "\n")
+				if (numlines >= 2):
+					presentation_start = False
+				continue
 
 
 
@@ -281,7 +301,7 @@ while(presentation_start is True):
 
 	except sr.RequestError as e:
 		print("Could not request results from Google Speech Recognition service; {0}".format(e))
-		
+
 		numlines = countlines("output/sync.txt")
 		print("synclines: " + str(numlines) + "\n")
 		if (numlines >= 2):

@@ -2391,6 +2391,9 @@ def main(robotIP,robotPort):
 
     # gangnam_style(postureProxy,audioProxy,motionProxy)
 
+    file = open("output/introduction.txt", 'w')
+    file.write("\nfinishedintroduction")
+    file.close()
 
 
 
