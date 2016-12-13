@@ -11,6 +11,9 @@
 #include <cstring>
 
 bool has_started = false;
+bool has_introduced = false;
+bool set_introduction = false;
+int slow_writes = 0;
 
 void PoseCallback(const skeleton_markers::Skeleton::ConstPtr& msg){
 
@@ -95,29 +98,31 @@ facing away, folded arms, gesticulating, moving, covering mouth, hands in pocket
   gesture = "none";
 
 //poor_posture
-  int pTh = 3;
-  if( ((head.getZ() < l_shoulder.getZ()) && (head.getZ() < r_shoulder.getZ())) && ((l_hand.getZ() < l_hip.getZ()-pTh) && (l_hand.getZ() < r_hip.getZ()-pTh)) &&
+
+  int pTh = 4;
+  if( ((head.getZ() < l_shoulder.getZ()) && (head.getZ() < r_shoulder.getZ())) && ((l_shoulder.getZ() < l_hip.getZ()-pTh) && (r_shoulder.getZ() < r_hip.getZ()-pTh)) &&
       (l_hand.getY() < l_shoulder.getY()) && (r_hand.getY() < r_shoulder.getY()) )
   {
     gesture = "poor_posture";
   }
 
+
 //folded_arms
   if(l_hand.getX() > r_hand.getX()){
-    gesture = "folded_arms";
+    gesture = "folding_arms";
   }
 
 //covering_mouth (hands near face)
   int cmTh = 10;
-  if( ((neck.getY() < l_hand.getY()) && (l_hand.getY() < neck.getY()+cmTh+10)) && ((neck.getX()-cmTh < -l_hand.getX()) && (-l_hand.getX() < neck.getX()+cmTh)) ||
-      ((neck.getY() < r_hand.getY()) && (r_hand.getY() < neck.getY()+cmTh+10)) && ((neck.getX()-cmTh <  r_hand.getX()) && ( r_hand.getX() < neck.getX()+cmTh)) )
+  if( ((neck.getY() < l_hand.getY()) && (l_hand.getY() < neck.getY()+cmTh+20)) && ((neck.getX()-cmTh < -l_hand.getX()) && (-l_hand.getX() < neck.getX()+cmTh)) ||
+      ((neck.getY() < r_hand.getY()) && (r_hand.getY() < neck.getY()+cmTh+20)) && ((neck.getX()-cmTh <  r_hand.getX()) && ( r_hand.getX() < neck.getX()+cmTh)) )
   {
     gesture = "covering_mouth";
   }
 
 //facing away
   if(l_shoulder.getX() > r_shoulder.getX()){
-    gesture = "facing_away";
+    gesture = "turning_away";
   }
 
 //looking_down
@@ -125,36 +130,66 @@ facing away, folded arms, gesticulating, moving, covering mouth, hands in pocket
     gesture = "looking_down";
   }
 
-//start
-  //if((l_hand.getY() > l_shoulder.getY()) && (r_hand.getY() > r_shoulder.getY())
-//&& (l_hand.getX() < l_elbow.getX()+6) && (l_hand.getX() > l_elbow.getX()-6)
-//&& (r_hand.getX() < r_elbow.getX()+6) && (r_hand.getX() > r_elbow.getX()-6)
-//){
+
+  //if before start and hasn't finished introducing yet
+  if(!has_introduced && !has_started){
+    //check introduction for finishedintroduction
+    std::string introstring;
+    std::ifstream introfile("../Prezence/output/introduction.txt");
+    //for some reason I have to open it twice
+    introfile.open("../Prezence/output/introduction.txt");
+    introfile.close();
+
+    introfile.open("../Prezence/output/introduction.txt");
+    introfile >> introstring;
+    introfile >> introstring;
+    introfile.close();
+    //if finished introduction found then it has introduced
+    if(introstring=="finishedintroduction"){has_introduced = true;}
+  }
+
+//introduction -> start
   if(r_hand.getY() > r_shoulder.getY()+15){
-    //gesture = "start";
-    if(!has_started){
+
+    //gesture = "introduction"
+    if(!has_introduced && !set_introduction && !has_started){
+      gesture = "introduction";
+      //write introduction to introduction.txt
+      std::ofstream introfile("../Prezence/output/introduction.txt", std::ios_base::app);
+      introfile << "introduction";
+      introfile.close();
+      set_introduction = true;
+      //ROS_INFO("introduction status: %s", introstring.c_str());
+    }
+
+    //gesture = "start"
+    if(!has_started && has_introduced){
       //write start to sync.txt
       std::ofstream startfile("../Prezence/output/sync.txt", std::ios_base::app);
       startfile << "start";
       startfile.close();
+      has_started = true;
     }
-    has_started = true;
+
   }
 
-  if((l_hand.getY() > l_shoulder.getY()-5) && (l_hand.getZ() < l_shoulder.getZ() - 5)){
+
+//end
+  if(l_hand.getY() > l_shoulder.getY()+15){
     gesture = "end";
     if(has_started){
-      //write start to sync.txt
+      //write stop to sync.txt
       std::ofstream endfile("../Prezence/output/sync.txt", std::ios_base::app);
       endfile << "\nstop\n";
       endfile.close();
     }
   }
-//l_hip.getX(), l_hip.getY(), l_hand.getX(), l_hand.getY(), head.getY(), r_hip.getX(), r_hand.getX(), r_hand.getY());
+
+//gangnam_style
   if(((-l_hand.getX() > -l_hip.getX()+30)&&(l_hand.getY() < l_hip.getY()+5)) && ((r_hand.getY() > head.getY()+15)&&(r_hand.getX() > r_hip.getX()+20))){
     gesture = "##########################";
     if(has_started){
-      //write start to sync.txt
+      //write opp to gangnam_file.txt
       std::ofstream gangnam_file("../Prezence/output/gangnam_file.txt", std::ios_base::app);
       gangnam_file << "opp\n";
       gangnam_file.close();
@@ -164,7 +199,11 @@ facing away, folded arms, gesticulating, moving, covering mouth, hands in pocket
 //get timestamp
   time_t seconds_past_epoch = time(0);
 
-if(has_started){
+slow_writes++;
+
+if(has_started && (slow_writes%62==0)){
+  ROS_INFO("writing_to_file");
+
 //write pitch to head_gaze.txt
   std::ofstream headfile("../Prezence/output/head_gaze.txt", std::ios_base::app);
   headfile << seconds_past_epoch << " " << pitch << std::endl;
@@ -191,10 +230,10 @@ if(has_started){
   ROS_INFO("status: %s", endstring.c_str());
 
 //prints and sleep
-  ROS_INFO("position: %f, %f, %f, %f, %f, %f, %f, %f", l_hip.getX(), l_hip.getY(), l_hand.getX(), l_hand.getY(), head.getY(), r_hip.getX(), r_hand.getX(), r_hand.getY());
+  ROS_INFO("position: %f, %f", l_hand.getZ(), l_shoulder.getZ());
   ROS_INFO("gesture: %s", gesture.c_str());
   if(has_started){
-    ros::Duration(2).sleep();
+    ros::Duration(0).sleep();
   }
 
 }
@@ -217,6 +256,10 @@ int main(int argc, char** argv){
   std::ofstream ofopp;
   ofopp.open("../Prezence/output/gangnam_file.txt", std::ofstream::out | std::ofstream::trunc);
   ofopp.close();
+//clear file first
+  std::ofstream ofint;
+  ofint.open("../Prezence/output/introduction.txt", std::ofstream::out | std::ofstream::trunc);
+  ofint.close();
 
 //init ros and create nodehandle
   ros::init(argc, argv, "skeleton_monitor");
