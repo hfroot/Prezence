@@ -10,29 +10,8 @@ from threading import Thread
 import pygame
 
 
-def StiffnessOn(proxy):
-    # We use the "Body" name to signify the collection of all joints
-    pNames = "Body"
-    pStiffnessLists = 1.0
-    pTimeLists = 1.0
-    proxy.stiffnessInterpolation(pNames, pStiffnessLists, pTimeLists)
-
-def StiffnessOff(proxy):
-    # We use the "Body" name to signify the collection of all joints
-    pNames = "Body"
-    pStiffnessLists = 0.0
-    pTimeLists = 1.0
-    proxy.stiffnessInterpolation(pNames, pStiffnessLists, pTimeLists)
-
-def StandUp(proxy):
-    proxy.goToPosture("StandInit", 2.0)
-
-def SitDown(proxy):
-    proxy.goToPosture("Sit", 1.0)
-
 def Walk(proxy,x,y,theta):
     proxy.moveTo(x, y, theta)
-    # self.onStopped()
 
 def gesture_1_handwave(motionProxy) :
 
@@ -149,12 +128,10 @@ def gesture_1_handwave(motionProxy) :
       motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
-
 def gesture_2_puthandsdown(animatedSpeechProxy):
 
     # say the text with the local configuration
     animatedSpeechProxy.say("I can't see your face, could you put your hands down?", gesture_confused)
-
 def gesture_3_leaning(motionProxy):
     # Choregraphe simplified export in Python.
     names = list()
@@ -270,7 +247,6 @@ def gesture_3_leaning(motionProxy):
       motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
-
 def gesture_4_shrugging(motionProxy,postureProxy):
     # Choregraphe simplified export in Python.
     names = list()
@@ -386,11 +362,9 @@ def gesture_4_shrugging(motionProxy,postureProxy):
     except BaseException, err:
       print err
 
-    postureProxy.goToPosture("StandInit", 1.0)
+    postureProxy.goToPosture("Stand", 1.0)
+def gesture_4_scratchhead(motionProxy):
 
-
-
-def gesture_4_scratchhead(motionProxy,postureProxy):
     # Choregraphe simplified export in Python.
     names = list()
     times = list()
@@ -504,123 +478,6 @@ def gesture_4_scratchhead(motionProxy,postureProxy):
       motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
-
-def gesture_6_speedup(motionProxy,postureProxy):
-    # Choregraphe simplified export in Python.
-    names = list()
-    times = list()
-    keys = list()
-
-    names.append("HeadPitch")
-    times.append([0.24, 7.16])
-    keys.append([-0.161112, -0.161112])
-
-    names.append("HeadYaw")
-    times.append([0.24, 7.16])
-    keys.append([-0.0291879, -0.0291878])
-
-    names.append("LAnklePitch")
-    times.append([0.24, 7.16])
-    keys.append([0.0889301, 0.0889301])
-
-    names.append("LAnkleRoll")
-    times.append([0.24, 7.16])
-    keys.append([-0.131882, -0.131882])
-
-    names.append("LElbowRoll")
-    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
-    keys.append([-0.41874, -0.0459781, -1.2517, -0.44175, -0.0705221, -0.193242, -1.22409, -0.44175, -0.0705221, -0.418739])
-
-    names.append("LElbowYaw")
-    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
-    keys.append([-1.21344, -0.245482, -0.090548, 0.0919981, 0.0199001, -0.0767419, 0.00609398, 0.091998, 0.0199001, -1.21344])
-
-    names.append("LHand")
-    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
-    keys.append([0.2876, 0.67, 0.67, 0.67, 0.67, 0.67, 0.67, 0.67, 0.67, 0.2876])
-
-    names.append("LHipPitch")
-    times.append([0.24, 7.16])
-    keys.append([0.136568, 0.136568])
-
-    names.append("LHipRoll")
-    times.append([0.24, 7.16])
-    keys.append([0.101286, 0.101286])
-
-    names.append("LHipYawPitch")
-    times.append([0.24, 7.16])
-    keys.append([-0.164096, -0.164096])
-
-    names.append("LKneePitch")
-    times.append([0.24, 7.16])
-    keys.append([-0.0874801, -0.0874801])
-
-    names.append("LShoulderPitch")
-    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
-    keys.append([1.468, 0.0950661, -0.046062, 0.920358, 1.50941, -0.044528, -0.090548, 0.920358, 1.50941, 1.468])
-
-    names.append("LShoulderRoll")
-    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
-    keys.append([0.170232, 0.747016, -0.305308, -0.092082, 0.168698, 0.237728, -0.314159, -0.092082, 0.168698, 0.170232])
-
-    names.append("LWristYaw")
-    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
-    keys.append([0.075124, -1.53404, -1.44354, -0.61671, -1.44047, -1.82387, -1.6721, -0.61671, -1.44047, 0.075124])
-
-    names.append("RAnklePitch")
-    times.append([0.24, 7.16])
-    keys.append([0.090548, 0.090548])
-
-    names.append("RAnkleRoll")
-    times.append([0.24, 7.16])
-    keys.append([0.1335, 0.1335])
-
-    names.append("RElbowRoll")
-    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
-    keys.append([0.420358, 1.04776, 1.04776, 1.04776, 1.04776, 1.04776, 1.04776, 1.04776, 1.04776, 0.420357])
-
-    names.append("RElbowYaw")
-    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
-    keys.append([1.20722, 0.808376, 0.808376, 0.808376, 0.808376, 0.808376, 0.808376, 0.808375, 0.808375, 1.20722])
-
-    names.append("RHand")
-    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
-    keys.append([0.2876, 0.044, 0.044, 0.1552, 0.1552, 0.1552, 0.1552, 0.1552, 0.1552, 0.2876])
-
-    names.append("RHipPitch")
-    times.append([0.24, 7.16])
-    keys.append([0.136484, 0.136484])
-
-    names.append("RHipRoll")
-    times.append([0.24, 7.16])
-    keys.append([-0.10427, -0.10427])
-
-    names.append("RHipYawPitch")
-    times.append([0.24, 7.16])
-    keys.append([-0.164096, -0.164096])
-
-    names.append("RKneePitch")
-    times.append([0.24, 7.16])
-    keys.append([-0.0889301, -0.0889301])
-
-    names.append("RShoulderPitch")
-    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
-    keys.append([1.46348, 1.42666, 1.42666, 1.42666, 1.42666, 1.42666, 1.42666, 1.42666, 1.42666, 1.46348])
-
-    names.append("RShoulderRoll")
-    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
-    keys.append([-0.173384, -0.159578, -0.159578, -0.159578, -0.159578, -0.159578, -0.159578, -0.159578, -0.159578, -0.173384])
-
-    names.append("RWristYaw")
-    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
-    keys.append([0.0597839, -0.113558, -0.113558, -0.113558, -0.113558, -0.113558, -0.113558, -0.113558, -0.113558, 0.059784])
-
-    try:
-      motionProxy.angleInterpolation(names, keys, times, True)
-    except BaseException, err:
-      print err
-
-
 def gesture_5_arms(motionProxy):
 
     # Choregraphe simplified export in Python.
@@ -736,7 +593,120 @@ def gesture_5_arms(motionProxy):
       motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
+def gesture_6_speedup(motionProxy):
+    # Choregraphe simplified export in Python.
+    names = list()
+    times = list()
+    keys = list()
 
+    names.append("HeadPitch")
+    times.append([0.24, 7.16])
+    keys.append([-0.161112, -0.161112])
+
+    names.append("HeadYaw")
+    times.append([0.24, 7.16])
+    keys.append([-0.0291879, -0.0291878])
+
+    names.append("LAnklePitch")
+    times.append([0.24, 7.16])
+    keys.append([0.0889301, 0.0889301])
+
+    names.append("LAnkleRoll")
+    times.append([0.24, 7.16])
+    keys.append([-0.131882, -0.131882])
+
+    names.append("LElbowRoll")
+    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
+    keys.append([-0.41874, -0.0459781, -1.2517, -0.44175, -0.0705221, -0.193242, -1.22409, -0.44175, -0.0705221, -0.418739])
+
+    names.append("LElbowYaw")
+    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
+    keys.append([-1.21344, -0.245482, -0.090548, 0.0919981, 0.0199001, -0.0767419, 0.00609398, 0.091998, 0.0199001, -1.21344])
+
+    names.append("LHand")
+    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
+    keys.append([0.2876, 0.67, 0.67, 0.67, 0.67, 0.67, 0.67, 0.67, 0.67, 0.2876])
+
+    names.append("LHipPitch")
+    times.append([0.24, 7.16])
+    keys.append([0.136568, 0.136568])
+
+    names.append("LHipRoll")
+    times.append([0.24, 7.16])
+    keys.append([0.101286, 0.101286])
+
+    names.append("LHipYawPitch")
+    times.append([0.24, 7.16])
+    keys.append([-0.164096, -0.164096])
+
+    names.append("LKneePitch")
+    times.append([0.24, 7.16])
+    keys.append([-0.0874801, -0.0874801])
+
+    names.append("LShoulderPitch")
+    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
+    keys.append([1.468, 0.0950661, -0.046062, 0.920358, 1.50941, -0.044528, -0.090548, 0.920358, 1.50941, 1.468])
+
+    names.append("LShoulderRoll")
+    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
+    keys.append([0.170232, 0.747016, -0.305308, -0.092082, 0.168698, 0.237728, -0.314159, -0.092082, 0.168698, 0.170232])
+
+    names.append("LWristYaw")
+    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
+    keys.append([0.075124, -1.53404, -1.44354, -0.61671, -1.44047, -1.82387, -1.6721, -0.61671, -1.44047, 0.075124])
+
+    names.append("RAnklePitch")
+    times.append([0.24, 7.16])
+    keys.append([0.090548, 0.090548])
+
+    names.append("RAnkleRoll")
+    times.append([0.24, 7.16])
+    keys.append([0.1335, 0.1335])
+
+    names.append("RElbowRoll")
+    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
+    keys.append([0.420358, 1.04776, 1.04776, 1.04776, 1.04776, 1.04776, 1.04776, 1.04776, 1.04776, 0.420357])
+
+    names.append("RElbowYaw")
+    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
+    keys.append([1.20722, 0.808376, 0.808376, 0.808376, 0.808376, 0.808376, 0.808376, 0.808375, 0.808375, 1.20722])
+
+    names.append("RHand")
+    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
+    keys.append([0.2876, 0.044, 0.044, 0.1552, 0.1552, 0.1552, 0.1552, 0.1552, 0.1552, 0.2876])
+
+    names.append("RHipPitch")
+    times.append([0.24, 7.16])
+    keys.append([0.136484, 0.136484])
+
+    names.append("RHipRoll")
+    times.append([0.24, 7.16])
+    keys.append([-0.10427, -0.10427])
+
+    names.append("RHipYawPitch")
+    times.append([0.24, 7.16])
+    keys.append([-0.164096, -0.164096])
+
+    names.append("RKneePitch")
+    times.append([0.24, 7.16])
+    keys.append([-0.0889301, -0.0889301])
+
+    names.append("RShoulderPitch")
+    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
+    keys.append([1.46348, 1.42666, 1.42666, 1.42666, 1.42666, 1.42666, 1.42666, 1.42666, 1.42666, 1.46348])
+
+    names.append("RShoulderRoll")
+    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
+    keys.append([-0.173384, -0.159578, -0.159578, -0.159578, -0.159578, -0.159578, -0.159578, -0.159578, -0.159578, -0.173384])
+
+    names.append("RWristYaw")
+    times.append([0.24, 0.96, 1.68, 2.28, 2.88, 3.92, 4.92, 5.56, 6.08, 7.16])
+    keys.append([0.0597839, -0.113558, -0.113558, -0.113558, -0.113558, -0.113558, -0.113558, -0.113558, -0.113558, 0.059784])
+
+    try:
+      motionProxy.angleInterpolation(names, keys, times, True)
+    except BaseException, err:
+      print err
 def gesture_6_bored(motionProxy):
     # Choregraphe simplified export in Python.
     names = list()
@@ -851,7 +821,6 @@ def gesture_6_bored(motionProxy):
       motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
-
 def gesture_7_coverears(motionProxy):
     # Choregraphe simplified export in Python.
 
@@ -1084,7 +1053,6 @@ def gesture_7_coverears(motionProxy):
       motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
-
 def gesture_8_tilt_head(motionProxy):
     # Choregraphe simplified export in Python.
     names = list()
@@ -1200,7 +1168,6 @@ def gesture_8_tilt_head(motionProxy):
       motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
-
 def gesture_9_nod(motionProxy):
 
     # Choregraphe simplified export in Python.
@@ -1315,7 +1282,6 @@ def gesture_9_nod(motionProxy):
       motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
-
 def gesture_confused(motionProxy):
 
     # Choregraphe simplified export in Python.
@@ -1431,7 +1397,6 @@ def gesture_confused(motionProxy):
       motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
-
 def gesture_standattention(motionProxy):
     # Choregraphe simplified export in Python.
     names = list()
@@ -1780,10 +1745,7 @@ def gesture_standattention(motionProxy):
       motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
         print err
-
-def gangnam_style(postureProxy,audioProxy,motionProxy):
-    # postureProxy.goToPosture("StandInit", 1.0)
-    # fileId = audioProxy.loadFile("home/human/Desktop/gangnamstyle.wav")
+def gangnam_style(postureProxy,motionProxy):
     # Choregraphe simplified export in Python.
 
     names = list()
@@ -1894,15 +1856,11 @@ def gangnam_style(postureProxy,audioProxy,motionProxy):
     times.append([0.96, 1.32, 1.64, 1.88, 2.12, 2.36, 2.6, 2.84, 3.08, 3.32, 3.56, 3.8, 4.04, 4.28, 4.76, 5, 5.24, 5.48, 5.72, 5.96, 6.2, 6.44, 6.68, 6.92, 7.16, 7.4, 7.64, 7.88, 8.36, 8.6, 8.84, 9.08, 9.32, 9.56, 9.8, 10.04, 10.28, 10.52, 10.76, 11, 11.24, 11.48, 11.72, 11.96, 12.2, 13, 13.24, 13.48, 13.72, 13.96, 14.2, 14.44, 14.68, 14.92, 15.16, 15.4, 15.64, 15.88, 16.24, 16.64])
     keys.append([0.115008, 0.115008, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, 0.115008, 0.512313, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.107338, -0.105804, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, -0.431096, 1.50029, 1.7794])
 
-    #audioProxy.post.playFile("/home/human/Prezence/kinetic_feedback/pynaoqi-python2.7-2.1.2.17-linux64/gangnamstyle.wav",0.5,0.5)
     pygame.init()
     pygame.mixer.music.load('kinetic_feedback/gangnamstyle.wav')
     pygame.mixer.music.play()
-    #pygame.quit()
     motionProxy.angleInterpolation(names, keys, times, True)
-    # postureProxy.goToPosture("StandInit", 1.0)
-
-def taichiquan(postureProxy,audioProxy,motionProxy):
+def taichiquan(motionProxy):
 
     postureProxy.goToPosture("StandInit", 1.0)
     # Choregraphe simplified export in Python.
@@ -2015,10 +1973,10 @@ def taichiquan(postureProxy,audioProxy,motionProxy):
     keys.append([1.53589, 0.164096])
 
     
-    audioProxy.post.playFile("/home/daryl/HCR/Prezence/kinetic_feedback/swiftswords_ext.mp3",0.5,0.5)
+    pygame.init()
+    pygame.mixer.music.load('kinetic_feedback/swiftswords_ext.wav')
+    pygame.mixer.music.play()
     motionProxy.angleInterpolation(names, keys, times, True)
-    postureProxy.goToPosture("StandInit", 1.0)
-
 def squat(motionProxy):
 
     # Choregraphe simplified export in Python.
@@ -2135,70 +2093,33 @@ def squat(motionProxy):
       motionProxy.angleInterpolation(names, keys, times, True)
     except BaseException, err:
       print err
+def Introduction(animatedSpeechProxy,motionProxy,postureProxy):
 
-def begin_presentation():
-    start = False
-    syncFile = open('output/sync.txt', 'r')
-    while not start:
-        # read sync
-        where = syncFile.tell()
-        line = syncFile.readline()
-        if not line or line in ['\n', '\r\n']:
-            time.sleep(1)
-            syncFile.seek(where)
-        else:
-            if line.rstrip('\n') == "start":
-                start = True
-    print "Sync File has announced start"
+    animatedSpeechProxy.say("These are some of the gestures I will do.", gesture_confused)
 
-def end_presentation():
-    start = False
-    syncFile = open('output/sync.txt', 'r')
-    while not start:
-        # read sync
-        where = syncFile.tell()
-        line = syncFile.readline()
-        if not line or line in ['\n', '\r\n']:
-            time.sleep(1)
-            syncFile.seek(where)
-        else:
-            if line.rstrip('\n') == "end":
-                start = True
-    print "Sync File has announced end"
+    animatedSpeechProxy.post.say("To start the presentation, raise your right arm like this" , gesture_confused)
 
-def decode_input(char,motionProxy):
-    if char == 1:
-        gesture_1_handwave(motionProxy)
+    animatedSpeechProxy.post.say("If you are looking down, I'll wave my hands like this", gesture_confused)
+    gesture_1_handwave(motionProxy)
+    
+    animatedSpeechProxy.post.say("If your voice is unclear, I will scratch my head" , gesture_confused)
+    gesture_4_scratchhead(motionProxy)
+    
+    animatedSpeechProxy.post.say("If you are talking too quickly, I will ask you to slow down" , gesture_confused)
+    gesture_5_arms(motionProxy)
+    
+    animatedSpeechProxy.post.say("If you are talking too slowly, I will ask you to speed up" , gesture_confused)
+    gesture_6_speedup(motionProxy)
+    
+    animatedSpeechProxy.post.say("If you are talking too loudly, I will cover my ears" , gesture_confused)
+    gesture_7_coverears(motionProxy)
+    
+    animatedSpeechProxy.post.say("And lastly, if you are talking too softly, I will ask you to speak louder" , gesture_confused)
+    gesture_8_tilt_head(motionProxy)
+    
+    animatedSpeechProxy.post.say("To end the presentation, stretch your left hand forward" , gesture_confused)
 
-    elif char == 2:
-        gesture_2_attention(motionProxy)
-
-    elif char == 3:
-        gesture_3_leaning(motionProxy)
-
-    elif char == 4:
-        gesture_4_shrugging(motionProxy)
-
-    elif char ==5:
-        gesture_5_arms(motionProxy)
-
-    elif char ==6:
-        gesture_6_bored(motionProxy)
-
-    elif char ==7:
-        gesture_7_coverears(motionProxy)
-
-    elif char ==8:
-        gesture_8_tilt_head(motionProxy)
-
-    else:
-        gesture_9_nod(motionProxy)
- 
 def main(robotIP,robotPort):
-
-    # kinetic_feedbackfile = open('output/kinetic_feedback.txt', 'w')
-    # kinetic_feedbackfile.close()
-
 
     #==================initialise the NAO===========================
     print "Initialising NAO"
@@ -2233,68 +2154,32 @@ def main(robotIP,robotPort):
         print "Could not create proxy to ALAudioPlayer"
         print "Error was: ",e
 
-
     try:
         ledsProxy = ALProxy("ALLeds", robotIP, robotPort)
     except Exception,e:
         print "Could not create proxy to ALLeds"
         print "Error was: ",e
 
-
-
     # Turn on the Motors
     motionProxy.wakeUp()
 
-    # ledsProxy.bIsRunning = True;
-    # ledsProxy.bMustStop = False;
-
-    # rDuration = 1.0;
-    # ledsProxy.post.fadeRGB( "FaceLedsTop", 0x0000ff, rDuration );
-    # ledsProxy.post.fadeRGB( "FaceLedsInternal", 0x00ff00, rDuration );
-    # ledsProxy.post.fadeRGB( "FaceLedsBottom", 0x0000ff, rDuration );
-    # ledsProxy.fadeRGB( "FaceLedsExternal", 0x0000ff, rDuration );
-
-    # while( not ledsProxy.bMustStop ):
-    #   ledsProxy=1.0
-    #   ledsProxy.fadeRGB( "FaceLedsInternal", 0x000000, rTime );
-    #   if( ledsProxy.bMustStop ):
-    #     break;
-    #   ledsProxy.fadeRGB( "FaceLedsInternal", 0x00ff00, rDuration );
-
-    # taichiquan(postureProxy,audioProxy,motionProxy)
-
-
     # say the text with the local configuration
-    animatedSpeechProxy.say("Please wait while I get ready, you can chill out now", gesture_confused)
-
-    #StandUp
+    animatedSpeechProxy.post.say("Please wait while I get ready, you can chill out now", gesture_confused)
     postureProxy.goToPosture("Stand", 3.0)
+
+
+    animatedSpeechProxy.post.say("Would you like an introduction to the presentation? If yes, please raise your right arm.", gesture_confused)
     
-    animatedSpeechProxy.say("These are some of the gestures I will do.", gesture_confused)
+    # check if sync has said to stop
+    gfile = open("output/gangnam_file.txt", 'r')
+    for sline in gfile:
+        if sline.rstrip('\n') == "presentation":
+            stop = True
+            print "User wanted a presentation"
+            Introduction()
+            break
 
-
-    animatedSpeechProxy.post.say("If you are looking down, I'll wave my hands like this", gesture_confused)
-    gesture_1_handwave(motionProxy)
-
-
-    animatedSpeechProxy.post.say("If your voice is unclear, I will scratch my head" , gesture_confused)
-    gesture_4_scratchhead(motionProxy,postureProxy)
-    postureProxy.goToPosture("Stand", 4.0)
-
-
-    animatedSpeechProxy.post.say("If you are talking too quickly, I will ask you to slow down" , gesture_confused)
-    gesture_5_arms(motionProxy)
-    postureProxy.goToPosture("Stand", 4.0)
-
-
-    animatedSpeechProxy.post.say("If you are talking too slowly, I will ask you to speed up" , gesture_confused)
-    gesture_6_speedup(motionProxy,postureProxy)
-
-    animatedSpeechProxy.post.say("If you are talking too loudly, I will cover my ears" , gesture_confused)
-    gesture_7_coverears(motionProxy)
-
-    animatedSpeechProxy.post.say("And lastly, if you are talking too softly, I will ask you to speak louder" , gesture_confused)
-    gesture_8_tilt_head(motionProxy)
+    gfile.close()
 
     #==================Check for Presentation to Begin===========================
     time.sleep(1) #change back to 1
@@ -2324,6 +2209,7 @@ def main(robotIP,robotPort):
     stop = False
     kinetic_feedbackfile = open('output/kinetic_feedback.txt', 'r')
     timeSinceLastNod = 0
+
     while not stop:
         where = kinetic_feedbackfile.tell()
         line = kinetic_feedbackfile.readline()
@@ -2335,17 +2221,17 @@ def main(robotIP,robotPort):
             time.sleep(1)
             kinetic_feedbackfile.seek(where)
             if time.time() - timeSinceLastNod > 15:
-                postureProxy.goToPosture("Stand", 3.0)
+                # postureProxy.goToPosture("Stand", 3.0)
                 gesture_9_nod(motionProxy) #Goes to listening state
                 timeSinceLastNod = time.time()
         else:
             #if kinetic feedback output file changes
             print "perform function"
             if line.rstrip('\n') != 0:
+
                 #do output            
                 char  = int(line.rstrip('\n'))
                 if char == 1:
-                    postureProxy.goToPosture("Stand", 2.0)
                     gesture_1_handwave(motionProxy)
                     print "handwave gesture, head_gaze_low"
 
@@ -2370,21 +2256,16 @@ def main(robotIP,robotPort):
                     print "speedup gesture, Speed Too Slow"                    
 
                 elif char ==7:
-                    postureProxy.goToPosture("Stand", 3.0)
                     gesture_7_coverears(motionProxy)
                     print "Cover ears, volume_high"                    
 
                 elif char ==8:
                     gesture_8_tilt_head(motionProxy)
-                    postureProxy.goToPosture("Stand", 3.0)
-
                     print "tilt head, volume_low"                    
 
                 else:
-                    postureProxy.goToPosture("Stand", 3.0)
                     gesture_9_nod(motionProxy)
                     print "Nodding Head and standing chill" 
-
 
         # check if sync has said to stop
         syncFileStop = open("output/sync.txt", 'r')
@@ -2415,7 +2296,7 @@ def main(robotIP,robotPort):
 
 
 
-    # check if sync has said to stop
+    # check if user calls for gangnam style
     gfile = open("output/gangnam_file.txt", 'r')
     for sline in gfile:
         if sline.rstrip('\n') == "opp":
@@ -2427,6 +2308,17 @@ def main(robotIP,robotPort):
 
     gfile.close()
 
+
+    gfile = open("output/gangnam_file.txt", 'r')
+    for sline in gfile:
+        if sline.rstrip('\n') == "taichi":
+            stop = True
+            print "User called for taichiquan"
+            animatedSpeechProxy.say("Well done for finding the secret move! Get Ready for some Mad Skills", gesture_confused)
+            taichiquan(motionProxy)
+            break
+
+    gfile.close()
 
     motionProxy.rest()
     

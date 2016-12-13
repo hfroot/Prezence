@@ -12,7 +12,7 @@
 **Thursday 22nd**: Final research paper
 
 ## Run
-So that the robot can be run with one command from one laptop, I've created a start script that can take some inputs as necessary. Currently, to run it, start in the `Prezence` directory and type `./scripts/start.sh dummy_programs serial`. The first command specifies where all the programs are, while the second specifies the control script to use. This may be changed in the future if you guys like the proposed structure.
+So that the robot can be run with one command from one laptop, I've created a start script that can take some inputs as necessary. Currently, to run it, start in the `Prezence` directory and type `bash begin.sh`. The first command specifies where all the programs are, while the second specifies the control script to use. This may be changed in the future if you guys like the proposed structure.
 
 ## Outputs
 
