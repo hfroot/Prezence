@@ -213,7 +213,7 @@ def givePostFeedback(historicalData, metrics, timeTaken):
     # this function aggregates the historical data
     # then fills in string templates with the relevant data
     feedbackList = []
-    feedbackList.append("Your speech was "+str(int(round(timeTaken/60)))+" minutes and "+str(int(round(timeTaken%60)))+" seconds long.\n")
+    feedbackList.append("Your speech was "+str(int(round(timeTaken)/60))+" minutes and "+str(int(round(timeTaken)%60))+" seconds long.\n")
     gestureCount = 0
     for m, dataList in historicalData.iteritems():
         if isGesture(m):
