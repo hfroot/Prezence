@@ -1,0 +1,84 @@
+#include "ros/ros.h"
+#include "geometry_msgs/PoseArray.h"
+#include <iostream>
+#include <fstream>
+#include <tf/transform_broadcaster.h>
+#include <string.h>
+
+void PoseCallback(const geometry_msgs::PoseArray::ConstPtr& msg){
+  //double x = msg->poses[0].position.x;
+  //double y = msg->poses[0].position.y;
+  double roll, pitch, yaw;	
+
+tf::Quaternion q(msg->poses[0].orientation.x, msg->poses[0].orientation.y, msg->poses[0].orientation.z, msg->poses[0].orientation.w);
+
+tf::Matrix3x3 rotMat(q);
+
+rotMat.getRPY(roll,pitch,yaw);
+
+yaw = (-yaw * 180.0 / M_PI) - 90; // conversion to degrees
+if( yaw < 0 ) yaw += 360.0; // convert negative to positive angles
+
+pitch = (-pitch * 180.0 / M_PI) - 270; // conversion to degrees
+if( pitch < 0 ) pitch += 360.0; // convert negative to positive angles
+
+std::string head_direction;
+
+if(pitch < 70){//down
+  if(yaw < 70){//left
+    head_direction = "downleft";
+  }
+  if(yaw >= 70 && yaw <= 110){//middle
+    head_direction = "down";
+  }
+  if(yaw > 110){//right
+    head_direction = "downright";
+  }
+}
+
+if(pitch >= 70 && pitch <= 110){//horizon
+  if(yaw < 70){//left
+    head_direction = "left";
+  }
+  if(yaw >= 70 && yaw <= 110){//middle
+    head_direction = "center";
+  }
+  if(yaw > 110){//right
+    head_direction = "right";
+  }
+}
+
+if(pitch > 110){//up
+  if(yaw < 70){//left
+    head_direction = "upleft";
+  }
+  if(yaw >= 70 && yaw <= 110){//middle
+    head_direction = "up";
+  }
+  if(yaw > 110){//right
+    head_direction = "upright";
+  }
+}
+
+
+
+  std::ofstream myfile("Desktop/example.txt", std::ios_base::app);
+  myfile << head_direction << std::endl;
+  myfile.close();
+
+  ROS_INFO("head_direction: %s, yaw: %f, pitch: %f", head_direction.c_str(), yaw, pitch);
+}
+
+int main(int argc, char** argv){
+//clear file first
+  /*std::ofstream ofs;
+  ofs.open("Desktop/example.txt", std::ofstream::out | std::ofstream::trunc);
+  ofs.close();*/
+
+
+  ros::init(argc, argv, "head_pose_monitor");
+  ros::NodeHandle nh;
+  ros::Subscriber sub = nh.subscribe("head_pose", 10, PoseCallback);
+  ros::spin();
+  return 0;
+}

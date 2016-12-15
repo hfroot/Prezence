@@ -1,0 +1,2 @@
+head_pose_estimation:head_pose_monitor:pi_tracker:skeleton_markers:skeleton_monitor
+-DCATKIN_DEVEL_PREFIX=/home/human/ros_catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/human/ros_catkin_ws/install -G Unix Makefiles

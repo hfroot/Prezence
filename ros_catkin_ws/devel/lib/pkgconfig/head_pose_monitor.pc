@@ -1,0 +1,8 @@
+prefix=/home/human/ros_catkin_ws/devel
+
+Name: head_pose_monitor
+Description: Description of head_pose_monitor
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/human/ros_catkin_ws/devel/lib 
+Requires: geometry_msgs roscpp rospy
