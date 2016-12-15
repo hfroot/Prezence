@@ -158,13 +158,13 @@ while(presentation_start is True):
 			if(voice_vol>500):
 				f_loud.write(str(time.time()) + " " + str(voice_vol) + "\n")
 				print("Volume: " + str(voice_vol))
-				number=0.6
-				space_split=7
+				number=0.61
+				space_split=140
 				f_speed.write(str(time.time()) + " " +str(space_split)+ "\n")
 				print(number)
 				print(space_split)
 				f_clarity.write(str(time.time()) + " " +str(number)+ "\n")
-				f_content.write("prezence does not understand your speech \n" )
+				f_content.write("prezence does not understand your speech\n")
 				numlines = countlines("output/sync.txt")
 				print("synclines: " + str(numlines) + "\n")
 				if (numlines >= 2):

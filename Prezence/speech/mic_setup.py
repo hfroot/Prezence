@@ -11,5 +11,5 @@ import re #to do regex
 import time #to do timer
 
 #m = sr.Microphone(device_index=4)
-miclist = m.list_microphone_names()
+miclist = sr.Microphone.list_microphone_names()
 pprint(miclist)

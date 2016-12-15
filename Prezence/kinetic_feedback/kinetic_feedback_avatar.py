@@ -2574,10 +2574,10 @@ def main(robotIP,robotPort):
     motionProxy.rest()
     
 if __name__ == "__main__":
-    robotIp = "169.254.44.123" #Set a default IP here
-    # robotIp = "127.0.0.1" #Set a default IP here
-    robotPort = 9559 #Set default POort here
-    # robotPort = 40676 #Set default POort here
+    #robotIp = "169.254.44.123" #Set a default IP here
+    robotIp = "127.0.0.1" #Set a default IP here
+    #robotPort = 9559 #Set default POort here
+    robotPort = 36730 #Set default POort here
 
     # if len(sys.argv) < 2:
     #     print "Usage python robotIP please"

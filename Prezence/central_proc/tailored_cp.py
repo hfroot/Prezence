@@ -242,11 +242,26 @@ def givePostFeedback(historicalData, metrics, timeTaken):
                 if percent > threshold:
                     feedbackList.append("You were looking down " + str(percent) + " percent of the time.\n")
             elif m == "speed":
-                total = 0
+                # totalSlow = 0
+                # totalFast = 0
+                # for d in dataList:
+                #     totalSlow += ( d < metrics[m]["min"] ) # sum the number of times it is above the min
+                #     totalFast += ( d > metrics[m]["max"] ) # sum the number of times it is above the max
+                # avgSlow = int(round(totalSlow/len(dataList)))
+                # avgFast = int(round(totalFast/len(dataList)))
+                # feedbackList.append("On average, you spoke at " + str(avg) + " words per minute.\n")
+                totalLow = 0
+                totalHigh = 0
                 for d in dataList:
-                    total += d
-                avg = int(round(total/len(dataList)))
-                feedbackList.append("On average, you spoke at " + str(avg) + " words per minute.\n")
+                    totalLow += ( d < metrics[m]["min"] )
+                    totalHigh += ( d > metrics[m]["max"] )
+                pLow = int(round(float(totalLow)/len(dataList)*100))
+                pHigh = int(round(float(totalHigh)/len(dataList)*100))
+                threshold = 5 # a certain amount of allowance
+                if pLow > threshold and totalLow > totalHigh:
+                    feedbackList.append("You spoke too slowly "+str(pLow)+" percent of the time.\n")
+                elif pHigh > threshold and totalHigh > totalLow:
+                    feedbackList.append("You spoke too quickly "+str(pHigh)+" percent of the time.\n")
             elif m == "volume":
                 totalLow = 0
                 totalHigh = 0
