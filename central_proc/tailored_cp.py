@@ -75,7 +75,7 @@ def makeFeedbackDecision(metrics, concerningData, feedbackFile):
             # it compares the data to the allowance and priority given in config
             # and finds the item that is the greatest outside the allowance and has the highest priority and flags this
             # print m+" "+str(len(info))+" "+str(metrics[m]['priority'])
-        print coveringMouthTotal
+        # print coveringMouthTotal
         problemMetric = ""
         if m == "gesture":
             if len(info) > 0:
@@ -98,9 +98,9 @@ def makeFeedbackDecision(metrics, concerningData, feedbackFile):
         feedbackFile.flush()
         # want to remove all the previous concerns about this issue because theoretically they've learned now
         if isGesture(currentMetric):
-            print concerningData["gesture"]
+            # print concerningData["gesture"]
             concerningData["gesture"][:] = [d for d in concerningData["gesture"] if d.get('data') != currentMetric]
-            print concerningData["gesture"]
+            # print concerningData["gesture"]
             # for gestureInfo in concerningData["gesture"]:
             #     if gestureInfo['data'] == currentMetric:
             #         del concerningData["gesture"][gestureInfo]
@@ -139,14 +139,14 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
                     continue
                 data = line.rstrip('\n').split()
                 if len(data) < 2:
-                    print "There was an issue with line: "+line
+                    # print "There was an issue with line: "+line
                     line = f.readline()
                     f.seek(f.tell())
                     continue
                 value = 0
                 metric = ""
                 timeDelay = time.time()-float(data[0])
-                print "reading "+m+" "+str(timeDelay)+" seconds after writing"
+                # print "reading "+m+" "+str(timeDelay)+" seconds after writing"
                 if not isGesture(m):
                     value = float(data[1])
                     metric = m
@@ -234,12 +234,13 @@ def givePostFeedback(historicalData, metrics, timeTaken):
         # print dataList
         if len(dataList) > 0:
             if m == "head_gaze":
-                print "head gaze feedback"
                 total = 0
                 for d in dataList:
                     total += ( d < metrics[m]["min"] ) # sum the number of times it is above the min
                 percent = int(round(float(total)/len(dataList) * 100))
-                feedbackList.append("You were looking down " + str(percent) + " percent of the time.\n")
+                threshold = 5
+                if percent > threshold:
+                    feedbackList.append("You were looking down " + str(percent) + " percent of the time.\n")
             elif m == "speed":
                 total = 0
                 for d in dataList:
