@@ -1,8 +1,8 @@
 speed min 130 max 200 allowance 1 priority 4
 volume min 1000 max 6000 allowance 0 priority 3
-clarity min 0.5 allowance 1 priority 6
-head_gaze min 75 allowance 2 priority 1
-gesture covering_mouth allowance 2 priority 5
+clarity min 0.6 allowance 1 priority 6
+head_gaze min 75 allowance 2 priority 2
+gesture covering_mouth allowance 1 priority 1
 gesture poor_posture allowance 99 priority 99
 gesture folding_arms allowance 99 priority 99
 gesture turning_away allowance 99 priority 99

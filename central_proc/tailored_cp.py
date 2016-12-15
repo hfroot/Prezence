@@ -68,7 +68,7 @@ def makeFeedbackDecision(metrics, concerningData, feedbackFile):
             # expire old feedback - THIS COULD BE MORE SOPHISTICATED
             if time.time()-i['timestamp'] > expireTime:
                 info.remove(i)
-                # print "Removing a concern from "+m
+                print "Removing a concern from "+m
             if m == "gesture":
                 if i['data'] == "covering_mouth":
                     coveringMouthTotal += 1
@@ -97,7 +97,15 @@ def makeFeedbackDecision(metrics, concerningData, feedbackFile):
         feedbackFile.write(str(FEEDBACK_MAP[currentFeedback])+"\n")
         feedbackFile.flush()
         # want to remove all the previous concerns about this issue because theoretically they've learned now
-        concerningData[currentMetric] = []
+        if isGesture(currentMetric):
+            print concerningData["gesture"]
+            concerningData["gesture"][:] = [d for d in concerningData["gesture"] if d.get('data') != currentMetric]
+            print concerningData["gesture"]
+            # for gestureInfo in concerningData["gesture"]:
+            #     if gestureInfo['data'] == currentMetric:
+            #         del concerningData["gesture"][gestureInfo]
+        else:
+            concerningData[currentMetric] = []
 
 def isGesture(metric):
     return not (metric == "clarity" or metric == "speed" or metric == "volume" or metric == "head_gaze")
@@ -161,17 +169,19 @@ def giveKineticFeedback(syncFile, metrics, historicalData, feedbackFile):
                     metric = "gesture"
                     maybeAppend = {"timestamp": float(data[0]), "data": value}
                     if value == "covering_mouth":
+                        concern = True
                         maybeAppend["issue"] = "high"
-                        concerningData[metric].append(maybeAppend)
+                        if not maybeAppend in concerningData[metric]:
+                            concerningData[metric].append(maybeAppend)
                 historicalData[metric].append(value)
                 timeDelay = time.time()-float(data[0])
-                # if timeDelay > TIME_DELAY_MAX:
-                #     print "reading "+m+" "+str(timeDelay)+" seconds after writing"
+                if timeDelay > TIME_DELAY_MAX:
+                    print "reading "+m+" "+str(timeDelay)+" seconds after writing"
 
                 line = f.readline()
                 f.seek(f.tell())
         global lastFeedback
-        if concern:
+        if concern > 0:
             if time.time() - lastFeedback > ROBOT_DELAY:
                 makeFeedbackDecision(metrics, concerningData, feedbackFile)
             else:
