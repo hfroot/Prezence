@@ -1,0 +1,6 @@
+Your speech was 2 minutes and 13 seconds long.
+I could not understand you 18 percent of the time.
+You spoke too slowly 35 percent of the time.
+You were folding your arms 62 percent of the time.
+You were looking down 9 percent of the time.
+You can do better! Think about my feedback and try again.
