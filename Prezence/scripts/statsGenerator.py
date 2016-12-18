@@ -10,8 +10,11 @@ numericMetrics = [
     "speed"
 ]
 
-categoricMetrics = [
-    "gesture"
+gestures = [
+    "covering_mouth",
+    "poor_posture",
+    "turning_away",
+    "folding_arms"
 ]
 
 # below is old style
@@ -38,48 +41,57 @@ def getMeans(folders):
 
 def getResultsFolders():
     folders = []
-
     for folder in os.listdir("results"):
         folders.append("results/"+folder)
     return folders
 
-def dataByMetric(folders):
-    # dataByMetric = {}
-
+def numericDataToFiles(folders):
     for metric in numericMetrics:
         dataByMetric = {}
         for folder in folders:
             if folder == "results/.DS_Store":
                 continue
             name = folder.split("/")[1]
-            # dataByMetric.append([])
             dataByMetric[name] = []
-            # currIdx = len(dataByMetric)-1
-            # currIdx = name
 
             file = open(folder+"/"+metric+".txt", "r")
             for line in file:
                 dataByMetric[name].append(float(line.rstrip("\n").split()[1]))
             file.close()
 
-        # print list(itertools.izip_longest(*dataByMetric.values()))
         with open('scripts/results/data_by_person_'+metric+'.csv', 'wb') as f:
             writer = csv.writer(f)
             writer.writerow(dataByMetric.keys())
             writer.writerows(itertools.izip_longest(*dataByMetric.values()))
 
+def gesturesToFiles(folders):
+    for gesture in gestures:
+        dataByGesture = {}
+        for folder in folders:
+            if folder == "results/.DS_Store":
+                continue
+            name = folder.split("/")[1]
+            dataByGesture[name] = []
+
+            file = open(folder+"/gesture.txt", "r")
+            for line in file:
+                newG = line.rstrip("\n").split()[1]
+                if newG == gesture:
+                    dataByGesture[name].append(1)
+                else:
+                    dataByGesture[name].append(0)
+            file.close()
+
+        with open('scripts/results/data_by_person_'+gesture+'.csv', 'wb') as f:
+            writer = csv.writer(f)
+            writer.writerow(dataByGesture.keys())
+            writer.writerows(itertools.izip_longest(*dataByGesture.values()))
+
+
+
 def main():
     folders = getResultsFolders()
-    
-    dataByMetric(folders)
-            
-
-
-    # test = {"T1": [[1,2,3], [5,6]], "T2": [ [12,13,14], [45,55]]}
-    # print test.keys()
-    # print test.values()
-    # print zip(*test.values())
-    # print dataByMetric.keys()
-    # print dataByMetric.values()
+    numericDataToFiles(folders)
+    gesturesToFiles(folders)
 
 main()
