@@ -14,7 +14,8 @@ gestures = [
     "covering_mouth",
     "poor_posture",
     "turning_away",
-    "folding_arms"
+    "folding_arms",
+    "looking_down"
 ]
 
 # below is old style
