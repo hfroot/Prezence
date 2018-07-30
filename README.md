@@ -1,4 +1,4 @@
-![Header](https://github.com/hfroot/Prezence/blob/master/prezence.pdf)
+![Header](https://github.com/hfroot/Prezence/blob/master/prezence.png)
 
 ## Project outline
 Public speaking is a skill many people struggle with, due to lack of experience and/or confidence. Human coaches can be too expensive to use regularly or for more informal occasions. This is why we developed Prezence, a robotic presentation delivery coach that won't get bored hearing you practice the same speech over and over again!
